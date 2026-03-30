@@ -15,6 +15,9 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
   ) {
     mensaje.textContent = "Inicio de sesión exitoso";
     mensaje.className = "mensaje exito";
+    setTimeout(function () {
+      window.location.href = "Pagina_Social.html";
+    }, 1500);
   } else {
     mensaje.textContent = "Usuario o contraseña incorrectos";
     mensaje.className = "mensaje error";
