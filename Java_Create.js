@@ -1,26 +1,38 @@
-document
-  .getElementById("registroForm")
-  .addEventListener("submit", function (e) {
-    e.preventDefault();
+import { getAuth, createUserWithEmailAndPassword } 
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    let usuario = document.getElementById("usuario").value;
-    let email = document.getElementById("email").value;
-    let password = document.getElementById("password").value;
+import { app } from "./Firebase.js";
 
-    let mensaje = document.getElementById("mensajeRegistro");
+const auth = getAuth(app);
 
-    let usuarioData = {
-      usuario: usuario,
-      email: email,
-      password: password,
-    };
+document.getElementById("registroForm").addEventListener("submit", function(e){
 
-    localStorage.setItem("usuario", JSON.stringify(usuarioData));
+  e.preventDefault();
 
-    mensaje.textContent = "Cuenta creada correctamente";
-    mensaje.className = "mensaje exito";
+  let usuario = document.getElementById("usuario").value;
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+  let confirmPassword = document.getElementById("confirmPassword").value;
 
-    setTimeout(function () {
-      window.location.href = "Pagina_Login.html";
-    }, 1500);
+  if(!email.endsWith("@escuelasproa.edu.ar")){
+    alert("Solo estudiantes PROA pueden registrarse");
+    return;
+  }
+
+  if(password !== confirmPassword){
+    alert("Las contraseñas no coinciden");
+    return;
+  }
+
+  createUserWithEmailAndPassword(auth, email, password)
+
+  .then(()=>{
+      alert("Cuenta creada correctamente");
+      window.location.href="Pagina_Login.html";
+  })
+
+  .catch((error)=>{
+      alert(error.message);
   });
+
+});

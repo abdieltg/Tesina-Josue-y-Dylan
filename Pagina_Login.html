@@ -15,16 +15,23 @@
         <h1>Sharee</h1>
 
         <form id="loginForm">
-          <input id="loginUsuario" type="text" placeholder="Usuario" required />
+          <form id="loginForm">
+            <input
+              id="loginEmail"
+              type="email"
+              placeholder="Correo institucional"
+              required
+            />
 
-          <input
-            id="loginPassword"
-            type="password"
-            placeholder="Contraseña"
-            required
-          />
+            <input
+              id="loginPassword"
+              type="password"
+              placeholder="Contraseña"
+              required
+            />
 
-          <button type="submit">Iniciar sesión</button>
+            <button type="submit">Iniciar sesión</button>
+          </form>
         </form>
 
         <p id="mensajeLogin" class="mensaje"></p>
@@ -36,6 +43,6 @@
       </div>
     </div>
 
-    <script src="Java_Login.js"></script>
+    <script type="module" src="Java_Login.js"></script>
   </body>
 </html>
