@@ -31,8 +31,8 @@ function cargarPosts() {
         
         div.innerHTML = `
           <div class="post-header">
-            <img src="${post.avatar_url}">
-            <span>${post.username}</span>
+            <img src="${post.avatar_url}" onclick="irAlPerfil(${post.usuario_id})" style="cursor: pointer;">
+            <span onclick="irAlPerfil(${post.usuario_id})" style="cursor: pointer;">${post.username}</span>
           </div>
           <p>${post.contenido}</p>
           <div class="post-actions">
@@ -102,6 +102,11 @@ function deletePost(post_id) {
     })
     .catch(err => console.error("Error:", err));
   }
+}
+
+function irAlPerfil(id) {
+  console.log("Ir al perfil de usuario:", id);
+  window.location.href = "Pagina_Perfil.html?id=" + id;
 }
 
 function cerrarSesion() {
