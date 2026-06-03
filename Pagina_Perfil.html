@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - Sharee</title>
+    <link rel="stylesheet" href="css/CSS_Perfil.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Sharee</div>
+        <div class="nav-buttons">
+            <button onclick="irAlFeed()">← Volver</button>
+            <button onclick="cerrarSesion()">Cerrar sesión</button>
+        </div>
+    </nav>
+
+    <main class="perfil-container">
+        <div class="perfil-header">
+            <img id="avatarPerfil" src="" alt="Avatar" class="avatar-grande">
+            <div class="perfil-info">
+                <h1 id="usernamePerfil"></h1>
+                <p id="emailPerfil"></p>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="numero" id="postCount">0</span>
+                        <span class="label">Posts</span>
+                    </div>
+                    <div class="stat">
+                        <span class="numero" id="followerCount">0</span>
+                        <span class="label">Seguidores</span>
+                    </div>
+                    <div class="stat">
+                        <span class="numero" id="followingCount">0</span>
+                        <span class="label">Siguiendo</span>
+                    </div>
+                </div>
+                <button id="btnSeguir" onclick="toggleSeguir()" class="btn-seguir">Seguir</button>
+            </div>
+        </div>
+
+        <div class="perfil-posts">
+            <h2>Posts de <span id="usernamePostsTitle"></span></h2>
+            <div id="postsUsuario"></div>
+        </div>
+    </main>
+
+    <script src="js/Java_Perfil.js"></script>
+</body>
+</html>
