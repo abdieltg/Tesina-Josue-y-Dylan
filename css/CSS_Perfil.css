@@ -1,0 +1,231 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.navbar {
+    background-color: #fff;
+    border-bottom: 2px solid #e74c3c;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.nav-buttons button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s;
+    font-weight: bold;
+}
+
+.nav-buttons button:hover {
+    background-color: #c0392b;
+}
+
+.perfil-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.perfil-header {
+    display: flex;
+    align-items: flex-start;
+    padding: 40px;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    gap: 30px;
+}
+
+.avatar-grande {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid white;
+    object-fit: cover;
+}
+
+.perfil-info h1 {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.perfil-info p {
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 20px;
+}
+
+.stats {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.numero {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.label {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.btn-seguir {
+    background-color: white;
+    color: #e74c3c;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-seguir:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.05);
+}
+
+.btn-seguir.siguiendo {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-seguir.siguiendo:hover {
+    background-color: #c0392b;
+}
+
+.perfil-posts {
+    padding: 40px;
+}
+
+.perfil-posts h2 {
+    margin-bottom: 20px;
+    color: #e74c3c;
+    font-size: 20px;
+}
+
+#postsUsuario {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.post {
+    background-color: #fff;
+    border: 1px solid #ecf0f1;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.3s;
+}
+
+.post:hover {
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.1);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.post-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.post-header img:hover {
+    transform: scale(1.1);
+}
+
+.post-header span {
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.post-header span:hover {
+    color: #e74c3c;
+}
+
+.post p {
+    color: #555;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+.post-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.post-actions button {
+    background-color: #fff;
+    border: 2px solid #e74c3c;
+    color: #e74c3c;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+}
+
+.post-actions button:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .perfil-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .stats {
+        justify-content: center;
+    }
+
+    .perfil-posts {
+        padding: 20px;
+    }
+}
