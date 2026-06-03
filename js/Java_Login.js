@@ -5,7 +5,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
   let password = document.getElementById("loginPassword").value;
   let mensaje = document.getElementById("mensajeLogin");
 
-  fetch("http://localhost/sharee/api/login.php", {
+  fetch("http://localhost/Tesina-Josue-y-Dylan-main/Sharee/api/login.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password })

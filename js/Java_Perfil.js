@@ -17,7 +17,7 @@ function obtenerUsuarioDePerfil() {
 }
 
 function cargarPerfil() {
-    fetch("http://localhost/sharee/api/get_profile.php?usuario_id=" + usuario_id_perfil)
+    fetch("http://localhost/Tesina-Josue-y-Dylan-main/Sharee/api/get_profile.php?usuario_id=" + usuario_id_perfil)
         .then(res => res.json())
         .then(data => {
             if (data.error) {
@@ -30,7 +30,7 @@ function cargarPerfil() {
             document.getElementById("emailPerfil").textContent = data.email;
             document.getElementById("usernamePostsTitle").textContent = data.username;
             
-            fetch("http://localhost/sharee/api/get_stats.php?usuario_id=" + usuario_id_perfil)
+            fetch("http://localhost/Tesina-Josue-y-Dylan-main/Sharee/api/get_stats.php?usuario_id=" + usuario_id_perfil)
                 .then(res => res.json())
                 .then(stats => {
                     document.getElementById("postCount").textContent = stats.posts;
@@ -40,8 +40,9 @@ function cargarPerfil() {
         })
         .catch(err => console.error("Error:", err));
 }
+
 function cargarPostsDelUsuario() {
-    fetch("http://localhost/sharee/api/get_user_posts.php?usuario_id=" + usuario_id_perfil)
+    fetch("http://localhost/Tesina-Josue-y-Dylan-main/Sharee/api/get_user_posts.php?usuario_id=" + usuario_id_perfil)
         .then(res => res.json())
         .then(posts => {
             const container = document.getElementById("postsUsuario");
@@ -85,7 +86,7 @@ function verificarSiSigue() {
         return;
     }
     
-    fetch("http://localhost/sharee/api/check_follow.php", {
+    fetch("http://localhost/Tesina-Josue-y-Dylan-main/Sharee/api/check_follow.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -97,7 +98,7 @@ function verificarSiSigue() {
     .then(data => {
         const btn = document.getElementById("btnSeguir");
         if (data.siguiendo) {
-            btn.textContent = "Dejando de seguir";
+            btn.textContent = "Dejar de seguir";
             btn.classList.add("siguiendo");
         } else {
             btn.textContent = "Seguir";
@@ -107,7 +108,7 @@ function verificarSiSigue() {
 }
 
 function toggleSeguir() {
-    fetch("http://localhost/sharee/api/toggle_follow.php", {
+    fetch("http://localhost/Tesina-Josue-y-Dylan-main/Sharee/api/toggle_follow.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -123,7 +124,7 @@ function toggleSeguir() {
 }
 
 function likePost(post_id) {
-    fetch("http://localhost/sharee/api/like_post.php", {
+    fetch("http://localhost/Tesina-Josue-y-Dylan-main/Sharee/api/like_post.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ usuario_id: usuario_id_actual, post_id })
@@ -136,7 +137,7 @@ function likePost(post_id) {
 
 function deletePost(post_id) {
     if (confirm("¿Estás seguro?")) {
-        fetch("http://localhost/sharee/api/delete_post.php", {
+        fetch("http://localhost/Tesina-Josue-y-Dylan-main/Sharee/api/delete_post.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ usuario_id: usuario_id_actual, post_id })
