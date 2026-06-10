@@ -1,6 +1,14 @@
 <?php
 header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json; charset=utf-8');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 $host = 'localhost';
 $user = 'root';
@@ -10,10 +18,18 @@ $database = 'sharee';
 $conexion = new mysqli($host, $user, $password, $database);
 
 if ($conexion->connect_error) {
-    die(json_encode(['error' => 'Conexión fallida']));
+    http_response_code(500);
+    echo json_encode(['error' => 'Conexión fallida: ' . $conexion->connect_error]);
+    exit;
 }
 
 $conexion->set_charset("utf8");
+
+if (!isset($_GET['usuario_id'])) {
+    http_response_code(400);
+    echo json_encode(['error' => 'usuario_id requerido']);
+    exit;
+}
 
 $usuario_id = intval($_GET['usuario_id']);
 
@@ -26,7 +42,8 @@ $sql = "SELECT p.id, p.contenido, p.likes, p.created_at, u.id as usuario_id, u.u
 $result = $conexion->query($sql);
 
 if (!$result) {
-    echo json_encode(['error' => 'Error en query']);
+    http_response_code(500);
+    echo json_encode(['error' => 'Error en query: ' . $conexion->error]);
     exit;
 }
 

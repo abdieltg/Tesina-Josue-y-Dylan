@@ -25,25 +25,20 @@ if ($conexion->connect_error) {
 
 $conexion->set_charset("utf8");
 
-$data = json_decode(file_get_contents("php://input"), true);
+$sql = "SELECT id, username, avatar_url FROM usuarios ORDER BY id DESC LIMIT 20";
+$result = $conexion->query($sql);
 
-if (!$data || !isset($data['post_id']) || !isset($data['usuario_id'])) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Datos incompletos']);
+if (!$result) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Error en query: ' . $conexion->error]);
     exit;
 }
 
-$post_id = intval($data['post_id']);
-$usuario_id = intval($data['usuario_id']);
-
-$sql = "DELETE FROM posts WHERE id = $post_id AND usuario_id = $usuario_id";
-
-if ($conexion->query($sql)) {
-    echo json_encode(['mensaje' => 'Post eliminado']);
-} else {
-    http_response_code(500);
-    echo json_encode(['error' => 'Error al eliminar post: ' . $conexion->error]);
+$usuarios = array();
+while ($row = $result->fetch_assoc()) {
+    $usuarios[] = $row;
 }
 
+echo json_encode($usuarios);
 $conexion->close();
 ?>

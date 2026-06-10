@@ -99,7 +99,6 @@ button:active {
   color: #764ba2;
 }
 
-/* Tablet */
 @media (max-width: 768px) {
   .box {
     padding: 30px 20px;
@@ -110,7 +109,6 @@ button:active {
   }
 }
 
-/* Mobile */
 @media (max-width: 480px) {
   .box {
     padding: 25px 15px;
@@ -124,6 +122,6 @@ button:active {
 
   input,
   button {
-    font-size: 16px; /* Evita zoom en iOS */
+    font-size: 16px; 
   }
 }

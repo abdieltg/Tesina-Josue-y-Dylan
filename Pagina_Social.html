@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Red Social</title>
+    <title>Red Social - Sharee</title>
     <link rel="stylesheet" href="css/CSS_Social.css" />
   </head>
 
@@ -14,22 +14,23 @@
       <input type="text" id="buscar" placeholder="Buscar usuarios" />
 
       <div class="perfil">
-        <img src="https://i.pravatar.cc/40" id="avatar" />
+        <img src="https://i.pravatar.cc/40" id="avatar" onclick="irAlPerfilPropio()" style="cursor: pointer;" />
+        <button onclick="cerrarSesion()" style="margin-left: 10px; padding: 8px 15px; background-color: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Cerrar sesión</button>
       </div>
     </header>
 
     <div class="container">
       <aside class="sidebar">
-        <a href="#">Inicio</a>
-        <a href="#">Explorar</a>
-        <a href="#">Mensajes</a>
-        <a href="#">Perfil</a>
-        <a href="#">Configuración</a>
+        <a href="Pagina_Social.html">🏠 Inicio</a>
+        <a href="#">🔍 Explorar</a>
+        <a href="#">💬 Mensajes</a>
+        <a href="#" onclick="irAlPerfilPropio()">👤 Perfil</a>
+        <a href="#">⚙️ Configuración</a>
       </aside>
 
       <main class="feed">
         <div class="crear-post">
-          <img src="https://i.pravatar.cc/40" />
+          <img src="https://i.pravatar.cc/40" id="avatarPost" />
 
           <input id="postInput" placeholder="¿Qué estás pensando?" />
 
@@ -41,24 +42,7 @@
 
       <aside class="rightbar">
         <h3>Sugerencias</h3>
-
-        <div class="usuario">
-          <img src="https://i.pravatar.cc/40?img=10" />
-          <span>coder01</span>
-          <button class="seguir">Seguir</button>
-        </div>
-
-        <div class="usuario">
-          <img src="https://i.pravatar.cc/40?img=11" />
-          <span>devmaster</span>
-          <button class="seguir">Seguir</button>
-        </div>
-
-        <div class="usuario">
-          <img src="https://i.pravatar.cc/40?img=12" />
-          <span>techuser</span>
-          <button class="seguir">Seguir</button>
-        </div>
+        <div id="sugerencias"></div>
       </aside>
     </div>
 
