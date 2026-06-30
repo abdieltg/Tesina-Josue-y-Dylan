@@ -22,11 +22,13 @@ if ($conexion->connect_error) {
 }
 
 $conexion->set_charset("utf8");
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(400);
     echo json_encode(['error' => 'Método no permitido']);
     exit;
 }
+
 if (!isset($_FILES['foto']) || $_FILES['foto']['error'] !== UPLOAD_ERR_OK) {
     http_response_code(400);
     echo json_encode(['error' => 'No se recibió archivo o hubo un error']);
@@ -42,24 +44,27 @@ if (!isset($_POST['usuario_id']) || empty($_POST['usuario_id'])) {
 $usuario_id = intval($_POST['usuario_id']);
 $archivo = $_FILES['foto'];
 
-$tamaño_maximo = 5 * 1024 * 1024; 
+$tamaño_maximo = 5 * 1024 * 1024;
 if ($archivo['size'] > $tamaño_maximo) {
     http_response_code(400);
     echo json_encode(['error' => 'La foto es muy grande (máximo 5MB)']);
     exit;
 }
+
 $tipos_permitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 if (!in_array($archivo['type'], $tipos_permitidos)) {
     http_response_code(400);
     echo json_encode(['error' => 'Tipo de archivo no permitido. Usa JPG, PNG, GIF o WEBP']);
     exit;
 }
+
 $foto_contenido = file_get_contents($archivo['tmp_name']);
 if ($foto_contenido === false) {
     http_response_code(500);
     echo json_encode(['error' => 'Error al leer el archivo']);
     exit;
 }
+
 $foto_contenido_escaped = $conexion->real_escape_string($foto_contenido);
 $foto_nombre = $conexion->real_escape_string($archivo['name']);
 $foto_tipo = $conexion->real_escape_string($archivo['type']);

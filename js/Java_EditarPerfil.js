@@ -12,10 +12,17 @@ const mensajeResultado = document.getElementById("mensajeResultado");
 const bioTextarea = document.getElementById("bio");
 const charCount = document.getElementById("charCount");
 
+const BASE_URL = "http://localhost/Tesina-Josue-y-Dylan/api/";
+
 function cargarDatos() {
-  fetch("http://localhost/Tesina-Josue-y-Dylan-main/Sharee/api/get_profile.php?usuario_id=" + usuario_id)
+  fetch(BASE_URL + "get_profile.php?usuario_id=" + usuario_id)
     .then(res => res.json())
     .then(data => {
+      if (data.error) {
+        console.error("Error:", data.error);
+        mostrarMensaje("Error al cargar datos", "error");
+        return;
+      }
       document.getElementById("username").value = data.username;
       document.getElementById("email").value = data.email;
       
@@ -28,10 +35,13 @@ function cargarDatos() {
 }
 
 function cargarFotoPerfil() {
-  const fotoUrl = `http://localhost/Tesina-Josue-y-Dylan-main/Sharee/api/get_profile_photo.php?usuario_id=${usuario_id}&t=${Date.now()}`;
+  const fotoUrl = `${BASE_URL}g_perffil_photo.php?usuario_id=${usuario_id}&t=${Date.now()}`;
+  
+  console.log("Cargando foto desde:", fotoUrl);
   
   fotoPreview.src = fotoUrl;
   fotoPreview.onerror = function() {
+    console.log("No hay foto, mostrando placeholder");
     this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23e0e0e0'/%3E%3Ccircle cx='100' cy='70' r='40' fill='%23999'/%3E%3Cellipse cx='100' cy='150' rx='60' ry='50' fill='%23999'/%3E%3C/svg%3E";
   };
 }
@@ -66,23 +76,29 @@ function subirFoto(archivo) {
   formData.append("foto", archivo);
   formData.append("usuario_id", usuario_id);
   
-  fetch("http://localhost/Tesina-Josue-y-Dylan-main/Sharee/api/upload_profile_photo.php", {
+  console.log("Subiendo foto a:", BASE_URL + "actualizar_perfil_photo.php");
+  
+  fetch(BASE_URL + "actualizar_perfil_photo.php", {
     method: "POST",
     body: formData
   })
-  .then(res => res.json())
+  .then(res => {
+    console.log("Respuesta status:", res.status);
+    return res.json();
+  })
   .then(data => {
+    console.log("Respuesta JSON:", data);
     if (data.error) {
       mostrarMensaje(data.error, "error");
       cargarFotoPerfil(); 
     } else {
       mostrarMensaje("Foto actualizada correctamente", "success");
+      setTimeout(() => cargarFotoPerfil(), 500);
     }
   })
   .catch(err => {
     console.error("Error:", err);
     mostrarMensaje("Error al subir foto", "error");
-    cargarFotoPerfil();
   });
 }
 
