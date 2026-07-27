@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sharee - Red Social</title>
+    <link rel="stylesheet" href="css/CSS_Social.css" />
+  </head>
+
+  <body>
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="logo">Sharee</div>
+
+      <input type="text" id="buscar" placeholder="Buscar usuarios..." />
+
+      <div class="perfil">
+        <img 
+          src="https://i.pravatar.cc/40" 
+          id="avatar" 
+          onclick="irAlPerfilPropio()" 
+          title="Ver tu perfil"
+        />
+        <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+      <!-- SIDEBAR - NAVEGACIÓN -->
+      <aside class="sidebar">
+        <a href="Pagina_Social.html">Inicio</a>
+        <a href="#">Explorar</a>
+        <a href="#">Mensajes</a>
+        <a href="#" onclick="irAlPerfilPropio()">Perfil</a>
+        <a href="#">Configuración</a>
+      </aside>
+
+      <!-- FEED PRINCIPAL -->
+      <main class="feed">
+        <!-- CREAR POST -->
+        <div class="crear-post">
+          <img 
+            src="https://i.pravatar.cc/40" 
+            id="avatarPost" 
+            title="Tu avatar"
+          />
+
+          <div class="crear-post-content">
+            <input 
+              id="postInput" 
+              placeholder="¿Qué estás pensando?" 
+              maxlength="500"
+            />
+            <button id="publicarBtn">Publicar</button>
+          </div>
+        </div>
+
+        <!-- POSTS -->
+        <div id="posts"></div>
+      </main>
+
+      <!-- RIGHTBAR - SUGERENCIAS -->
+      <aside class="rightbar">
+        <h3>Sugerencias</h3>
+        <div id="sugerencias"></div>
+      </aside>
+    </div>
+
+    <script src="js/Java_social.js"></script>
+  </body>
+</html>

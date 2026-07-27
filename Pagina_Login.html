@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sharee - Inicia Sesión</title>
+    <link rel="stylesheet" href="css/CSS_Login.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- SECCIÓN IZQUIERDA - CONTENIDO (Solo en pantallas grandes) -->
+      <div class="left-section">
+        <div class="logo-brand">
+          <h1>Sharee</h1>
+          <p>Conecta, comparte y crece juntos</p>
+        </div>
+
+        <div class="showcase-image">
+          <div class="showcase-image-bg" style="background-image: url('https://chat.google.com/u/0/api/get_attachment_url?url_type=FIFE_URL&content_type=image%2Fpng&attachment_token=AOo0EEUimz0eAswv0p27b%2BDHSeVnm9b%2F662XOqj0%2BToJppXYvXiaW%2FDjvlGw9r9w%2BzdKaIEIBP0iqWyzg1FhxPTwgkZyFw44Ql108%2F8klFaN8Nuw6L%2F6stSdfN31ydbGegZQgmoZEGQIRcWubxQzRL87aDC2AHH1iLcKCNqdNg8sK959R%2BQXMH1U8j2Ae0SRfeJ8ivh9o7g9hax5lXYy0Csoi%2BMJYfWibFieBHqSveUv5ulfBuztFK2%2FbXT1G3HBAl11EsnLF7%2FrAXY1Wcnbp4KKgERTy5eXjmRcGbwKU%2B2RpjpgbABD89Ea7ITDdHGjWwki2Jaam9x0%2FxjuVwz1MwUb9Rzvn0AsrE3UBLUSgEV7hkPP%2F3CegGrpuZdgcCx9i6HvpvZO9z%2FuzMI7dy%2Fse81x29F%2FbIargWlaV74Z0Xbag5XKknbBsrkPepdhWfyYnJ6FkDEenvus%2F9MxxTI3JGztfwnQmPvfQ%2BVMDNFZPnLA%2FG6%2FfEx0bzGW3sbmlNAENTJyfy%2FC97XGhb%2BZgI2P3Cw3SyqG2VPWl90h7nvyZigrs1bdQBaHisRypAXCr5Sn%2BYwU85JCzUxLtlZD381J%2BrFgSZ6lCB9hdn0BbBLAyrEECXncgTiYYkGRIc6uoLX1Im2XfmBpu2gYwsdZ5aj5owwiwaPXSeNEdFhze9l2P3t%2BrMu1AGq6%2FQ%3D%3D&allow_caching=true&sz=w1366-h641-rw&auditContext=forDisplay');">
+            <div class="showcase-content">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN DERECHA - FORMULARIO -->
+      <div class="right-section">
+        <div class="login-box">
+          <!-- Header del Login -->
+          <div class="login-header">
+            <h1>Sharee</h1>
+            <p>Inicia sesión en tu cuenta</p>
+          </div>
+
+          <!-- Mensaje de estado -->
+          <p id="mensajeLogin" class="mensaje"></p>
+
+          <!-- Formulario de login -->
+          <form id="loginForm">
+            <!-- Email -->
+            <div class="form-group">
+              <label for="loginEmail">Correo electrónico</label>
+              <input
+                id="loginEmail"
+                type="email"
+                placeholder="ejemplo@institucion.edu"
+                required
+                autocomplete="email"
+              />
+            </div>
+
+            <!-- Contraseña -->
+            <div class="form-group">
+              <div class="password-header">
+                <label for="loginPassword">Contraseña</label>
+                <a href="#" class="forgot-password-link">¿Olvidaste?</a>
+              </div>
+              <input
+                id="loginPassword"
+                type="password"
+                placeholder="••••••••"
+                required
+                autocomplete="current-password"
+              />
+            </div>
+
+            <!-- Botón principal -->
+            <button type="submit" class="btn-login" id="btnLogin">
+              Iniciar sesión
+            </button>
+          </form>
+
+          <!-- Divisor -->
+          <div class="divider">
+            <span>O continúa con</span>
+          </div>
+
+          <!-- Opciones sociales -->
+          <div class="social-login">
+            <button type="button" class="btn-social" title="Google" onclick="alert('Próximamente')">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              Google
+            </button>
+          </div>
+
+          <!-- Enlace a crear cuenta -->
+          <div class="link-section">
+            <p>
+              ¿No tienes cuenta?
+              <a href="Pagina_Create.html">Crear una nueva cuenta</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/Java_Login.js"></script>
+  </body>
+</html>
