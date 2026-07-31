@@ -1,0 +1,212 @@
+# Sharee
+
+## Red social escolar para estudiantes de ProA
+
+Sharee es una aplicación web desarrollada como proyecto de Tesina. Su objetivo es ofrecer una red social exclusiva para los estudiantes de la Escuela ProA, donde puedan compartir publicaciones, interactuar entre ellos y fortalecer la comunicación dentro de la comunidad educativa.
+
+---
+
+# Objetivo
+
+Crear una plataforma moderna y segura que permita a los alumnos de ProA compartir contenido e interactuar entre sí mediante publicaciones, perfiles y otras herramientas de comunicación.
+
+---
+
+# Problema que busca resolver
+
+Actualmente los estudiantes utilizan redes sociales generales que no están orientadas al ámbito escolar. Sharee busca ofrecer un espacio exclusivo para la comunidad ProA, facilitando la interacción entre alumnos en un entorno más organizado y seguro.
+
+---
+
+# Funcionalidades
+
+- Inicio de sesión.
+- Registro de usuarios.
+- Publicaciones.
+- Sistema de Me Gusta.
+- Perfiles de usuario.
+- Cambio de foto de perfil.
+- Buscar usuarios.
+- Seguir y dejar de seguir usuarios.
+- Visualizar perfiles.
+- Cierre de sesión.
+
+### Próximamente
+
+- Historias (Stories).
+- Mensajería privada.
+- Notificaciones.
+- Mejoras de seguridad.
+- Recuperación de contraseña.
+
+---
+
+# Tecnologías utilizadas
+
+## Frontend
+
+- HTML5
+- CSS3
+- JavaScript
+
+## Backend
+
+- PHP
+
+## Base de datos
+
+- MySQL
+- phpMyAdmin
+
+## Herramientas
+
+- Visual Studio Code
+- Git
+- GitHub
+- XAMPP
+
+---
+
+# Integrantes
+
+- Abdiel Josue Toro Guillen
+- Dylan
+
+---
+
+# Estructura del proyecto
+
+```
+Tesina-Josue-y-Dylan/
+│
+├── api/
+│   ├── login.php
+│   ├── register.php
+│   ├── create_post.php
+│   ├── get_posts.php
+│   ├── like_post.php
+│   ├── ...
+│
+├── css/
+│
+├── js/
+│
+├── img/
+│
+├── index.html
+│
+└── README.md
+```
+
+---
+
+# Instalación
+
+1. Clonar el repositorio.
+
+```bash
+git clone https://github.com/abdieltg/Tesina-Josue-y-Dylan.git
+```
+
+2. Copiar el proyecto dentro de la carpeta **htdocs** de XAMPP.
+
+3. Iniciar **Apache** y **MySQL** desde XAMPP.
+
+4. Importar la base de datos desde **phpMyAdmin**.
+
+5. Abrir el navegador e ingresar a:
+
+```
+http://localhost/Tesina-Josue-y-Dylan/
+```
+
+---
+
+# Estado del proyecto
+
+Actualmente el proyecto se encuentra en desarrollo.
+
+## Funcionalidades implementadas
+
+- Login.
+- Registro.
+- Feed de publicaciones.
+- Sistema de Likes.
+- Perfiles.
+- Cambio de foto de perfil.
+- Sistema de seguidores.
+- Búsqueda de usuarios.
+
+## Funcionalidades en desarrollo
+
+- Historias.
+- Mensajería.
+- Notificaciones.
+- Optimización del rendimiento.
+- Mejoras de seguridad.
+
+---
+
+# Capturas del sistema
+
+## Inicio de sesión
+
+*(Agregar captura aquí)*
+
+---
+
+## Feed principal
+
+*(Agregar captura aquí)*
+
+---
+
+## Perfil de usuario
+
+*(Agregar captura aquí)*
+
+---
+
+## Editar perfil
+
+*(Agregar captura aquí)*
+
+---
+
+# Versiones
+
+## v0.1
+
+- Estructura inicial del proyecto.
+
+## v0.5
+
+- Sistema de usuarios.
+- Publicaciones.
+- Likes.
+- Seguidores.
+- Perfiles.
+
+## v1.0 (Próximamente)
+
+- Historias.
+- Mensajería.
+- Optimización.
+- Seguridad.
+- Proyecto finalizado.
+
+---
+
+# Issues pendientes
+
+- Mejorar el sistema de perfiles.
+- Optimizar consultas a la base de datos.
+- Implementar historias.
+- Agregar mensajería.
+- Mejorar la seguridad.
+
+---
+
+# Licencia
+
+Proyecto desarrollado con fines educativos como Tesina de la Escuela ProA.
