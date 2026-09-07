@@ -240,5 +240,3 @@ function cerrarSesion() {
 cargarAvatarUsuario();
 cargarPosts();
 cargarSugerencias();
-
-setInterval(cargarPosts, 5000);
