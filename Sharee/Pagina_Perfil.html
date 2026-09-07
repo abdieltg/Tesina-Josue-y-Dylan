@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - Sharee</title>
+    <link rel="stylesheet" href="css/CSS_Perfil.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Sharee</div>
+        <div class="nav-buttons">
+            <button onclick="irAlFeed()">Volver</button>
+            <button onclick="cerrarSesion()">Cerrar sesión</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="editar-perfil-box">
+            <h1>Editar Perfil</h1>
+
+            <div class="foto-section">
+                <div class="foto-preview">
+                    <img id="fotoPreview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Tu foto de perfil">
+                </div>
+                <div class="foto-upload">
+                    <button type="button" id="cambiarFotoBtn" class="btn-cambiar-foto">Cambiar foto de perfil</button>
+                    <p class="info-foto">Elige entre nuestras fotos de perfil predeterminadas</p>
+                </div>
+            </div>
+
+            <!-- MODAL SELECTOR DE FOTOS -->
+            <div id="modalFotos" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Selecciona tu foto de perfil</h2>
+                        <button id="closeModal" class="modal-close" type="button">&times;</button>
+                    </div>
+                    <div id="fotosGrid" class="fotos-grid"></div>
+                    <div class="modal-buttons">
+                        <button id="cancelarFoto" class="modal-btn modal-btn-cancel" type="button">Cancelar</button>
+                        <button id="confirmarFoto" class="modal-btn modal-btn-confirm" type="button">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+
+            <form id="formularioPerfil">
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Correo</label>
+                    <input type="email" id="email" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Biografía</label>
+                    <textarea id="bio" placeholder="Cuéntanos sobre ti..." maxlength="500"></textarea>
+                    <small id="charCount">0/500</small>
+                </div>
+
+                <!-- INTERESES SECTION -->
+                <div class="intereses-section">
+                    <h3>Selecciona tus intereses (máximo 5)</h3>
+                    <div id="interesesGrid" class="intereses-grid"></div>
+                    <small style="display: block; margin-top: 12px; color: #999;">Seleccionados: <span id="contadorIntereses">0</span>/5</small>
+                </div>
+
+                <button type="submit" class="btn-guardar">Guardar cambios</button>
+                <p id="mensajeResultado" class="mensaje"></p>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/Java_Perfil.js"></script>
+</body>
+</html>
