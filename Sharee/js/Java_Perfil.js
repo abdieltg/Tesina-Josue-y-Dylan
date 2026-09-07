@@ -33,10 +33,45 @@ const INTERESES = [
 
 let fotoSeleccionada = null;
 let interesesSeleccionados = [];
+let perfilAVisualizar = null;
+let esPerfilPropio = false;
+
+// Obtener el ID del perfil a visualizar desde la URL
+function obtenerIdDelPerfil() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  return id ? parseInt(id) : null;
+}
+
+// Mostrar/Ocultar elementos según si es perfil propio o ajeno
+function configurarModo() {
+  const formulario = document.getElementById("formularioPerfil");
+  const cambiarFotoBtn = document.getElementById("cambiarFotoBtn");
+  const titulo = document.querySelector(".editar-perfil-box h1");
+  
+  if (esPerfilPropio) {
+    // Mostrar elementos de edición
+    if (formulario) formulario.style.display = "block";
+    if (cambiarFotoBtn) cambiarFotoBtn.style.display = "block";
+    if (titulo) titulo.textContent = "Editar Perfil";
+  } else {
+    // Ocultar elementos de edición
+    if (formulario) formulario.style.display = "none";
+    if (cambiarFotoBtn) cambiarFotoBtn.style.display = "none";
+    if (titulo) titulo.textContent = "Perfil de " + document.getElementById("username").value;
+    
+    // Hacer los campos readonly si no lo eran
+    document.getElementById("username").readOnly = true;
+    document.getElementById("email").readOnly = true;
+    document.getElementById("bio").readOnly = true;
+  }
+}
 
 // Cargar datos del usuario
 function cargarDatos() {
-  fetch(BASE_URL + "get_profile.php?usuario_id=" + usuario_id)
+  const idACargar = perfilAVisualizar || usuario_id;
+  
+  fetch(BASE_URL + "get_profile.php?usuario_id=" + idACargar)
     .then(res => res.json())
     .then(data => {
       document.getElementById("username").value = data.username || '';
@@ -62,12 +97,14 @@ function cargarDatos() {
       }
       
       generarIntereses();
+      configurarModo();
     })
     .catch(err => {
       console.error("Error cargando datos:", err);
       fotoSeleccionada = FOTOS_PREDEFINIDAS[0];
       document.getElementById("fotoPreview").src = fotoSeleccionada;
       generarIntereses();
+      configurarModo();
     });
 }
 
@@ -145,9 +182,12 @@ function generarIntereses() {
     btn.type = "button";
     btn.className = "interes-btn" + (interesesSeleccionados.includes(interes) ? " selected" : "");
     btn.textContent = interes;
+    btn.disabled = !esPerfilPropio; // Desabilitar si no es perfil propio
     
     btn.addEventListener("click", function(e) {
       e.preventDefault();
+      
+      if (!esPerfilPropio) return; // No permitir cambios si no es perfil propio
       
       if (interesesSeleccionados.includes(interes)) {
         interesesSeleccionados = interesesSeleccionados.filter(i => i !== interes);
@@ -243,4 +283,6 @@ function cerrarSesion() {
 }
 
 // Inicializar
+perfilAVisualizar = obtenerIdDelPerfil();
+esPerfilPropio = perfilAVisualizar === null || perfilAVisualizar === parseInt(usuario_id);
 cargarDatos();
