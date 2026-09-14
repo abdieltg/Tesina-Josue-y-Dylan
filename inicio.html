@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialHub - Red Social</title>
+    <link rel="stylesheet" href="Inicio.css">
+</head>
+<body>
+    <!-- Pantalla de Inicio de Sesión -->
+    <div id="loginScreen" class="screen active">
+        <div class="auth-container">
+            <div class="auth-box">
+                <h1 class="logo">Sharee</h1>
+                <p class="tagline">Conecta con el mundo</p>
+                <form id="loginForm">
+                    <input type="email" placeholder="Correo electrónico" required>
+                    <input type="password" placeholder="Contraseña" required>
+                    <button type="submit" class="btn-primary">Iniciar Sesión</button>
+                </form>
+                <p class="auth-switch">¿No tienes cuenta? <a href="#" onclick="switchScreen('signupScreen')">Regístrate</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Registro -->
+    <div id="signupScreen" class="screen">
+        <div class="auth-container">
+            <div class="auth-box">
+                <h1 class="logo">Sharee</h1>
+                <p class="tagline">Únete a nuestra comunidad</p>
+                <form id="signupForm">
+                    <input type="text" placeholder="Nombre completo" required>
+                    <input type="email" placeholder="Correo electrónico" required>
+                    <input type="password" placeholder="Contraseña" required>
+                    <input type="password" placeholder="Confirmar contraseña" required>
+                    <button type="submit" class="btn-primary">Crear Cuenta</button>
+                </form>
+                <p class="auth-switch">¿Ya tienes cuenta? <a href="#" onclick="switchScreen('loginScreen')">Inicia Sesión</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla Principal -->
+    <div id="mainScreen" class="screen">
+        <div class="container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2 class="logo-small">Sharee</h2>
+                </div>
+                <nav class="nav-menu">
+                    <a href="#" class="nav-item active" onclick="switchTab('home')">
+                        <span class="icon">🏠</span>
+                        <span>Inicio</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="switchTab('explore')">
+                        <span class="icon">🔍</span>
+                        <span>Explorar</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="switchTab('messages')">
+                        <span class="icon">💬</span>
+                        <span>Mensajes</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="switchTab('settings')">
+                        <span class="icon">⚙️</span>
+                        <span>Configuración</span>
+                    </a>
+                </nav>
+                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+            </aside>
+
+            <!-- Contenido Principal -->
+            <main class="main-content">
+                <!-- TAB: Inicio -->
+                <div id="homeTab" class="tab-content active">
+                    <div class="feed-header">
+                        <h2>Inicio</h2>
+                    </div>
+                    
+                    <!-- Crear Publicación -->
+                    <div class="post-creator">
+                        <div class="post-creator-header">
+                            <img src="https://via.placeholder.com/40" alt="Avatar" class="avatar-small">
+                            <input type="text" placeholder="¿Qué estás pensando?" id="postInput" class="post-input">
+                        </div>
+                        <div class="post-creator-actions">
+                            <button class="action-btn">📸 Foto</button>
+                            <button class="action-btn">🎥 Video</button>
+                            <button class="action-btn" onclick="publishPost()">Publicar</button>
+                        </div>
+                    </div>
+
+                    <!-- Feed de Publicaciones -->
+                    <div id="postsFeed" class="posts-feed">
+                        <!-- Las publicaciones se cargarán aquí -->
+                    </div>
+                </div>
+
+                <!-- TAB: Explorar -->
+                <div id="exploreTab" class="tab-content">
+                    <div class="feed-header">
+                        <h2>Explorar</h2>
+                    </div>
+                    <div class="search-container">
+                        <input type="text" placeholder="Buscar usuarios, hashtags, temas..." class="search-input">
+                        <button class="search-btn">🔍</button>
+                    </div>
+                    <div class="explore-content">
+                        <h3>Tendencias</h3>
+                        <div id="trendsList" class="trends-list">
+                            <!-- Las tendencias se cargarán aquí -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Mensajes -->
+                <div id="messagesTab" class="tab-content">
+                    <div class="feed-header">
+                        <h2>Mensajes</h2>
+                    </div>
+                    <div class="messages-container">
+                        <div class="conversations-list">
+                            <div id="conversationsList">
+                                <!-- Las conversaciones se cargarán aquí -->
+                            </div>
+                        </div>
+                        <div class="chat-window">
+                            <div class="chat-empty">
+                                <p>Selecciona una conversación para comenzar</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Configuración -->
+                <div id="settingsTab" class="tab-content">
+                    <div class="feed-header">
+                        <h2>Configuración</h2>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-section">
+                            <h3>Perfil</h3>
+                            <div class="settings-item">
+                                <label>Nombre</label>
+                                <input type="text" value="Usuario" disabled>
+                            </div>
+                            <div class="settings-item">
+                                <label>Correo</label>
+                                <input type="email" value="usuario@example.com" disabled>
+                            </div>
+                            <button class="btn-secondary">Editar Perfil</button>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Privacidad</h3>
+                            <div class="settings-item">
+                                <label>
+                                    <input type="checkbox" checked> Mostrar mi perfil a otros usuarios
+                                </label>
+                            </div>
+                            <div class="settings-item">
+                                <label>
+                                    <input type="checkbox" checked> Permitir mensajes directos
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Notificaciones</h3>
+                            <div class="settings-item">
+                                <label>
+                                    <input type="checkbox" checked> Notificaciones por correo
+                                </label>
+                            </div>
+                            <div class="settings-item">
+                                <label>
+                                    <input type="checkbox" checked> Notificaciones en navegador
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Peligro</h3>
+                            <button class="btn-danger">Eliminar Cuenta</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Sidebar Derecho (Opcional) -->
+            <aside class="right-sidebar">
+                <div class="trending-widget">
+                    <h3>Tendencias para ti</h3>
+                    <div id="trendingList" class="trending-items">
+                        <!-- Las tendencias se cargarán aquí -->
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="Logica.js"></script>
+</body>
+</html>
