@@ -1,0 +1,304 @@
+/* Estilos globales de Sharee */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-primario: #667EEA;
+    --color-secundario: #764BA2;
+    --color-fondo: #EEF1F7;
+    --color-blanco: #FFFFFF;
+    --color-gris-claro: #F5F7FA;
+    --color-gris-medio: #DDE1E6;
+    --color-gris-oscuro: #8892B0;
+    --color-texto: #2D3748;
+    --color-texto-secundario: #718096;
+    --color-error: #E53E3E;
+    --color-exito: #38A169;
+    --color-advertencia: #D69E2E;
+
+    --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transicion-rapida: all 0.15s ease;
+    --sombra-suave: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --sombra-media: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --sombra-elevada: 0 8px 24px rgba(0, 0, 0, 0.15);
+    --radio-pequeno: 8px;
+    --radio-medio: 12px;
+    --radio-grande: 18px;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Formularios */
+.grupo-formulario {
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.grupo-formulario label {
+    font-weight: 600;
+    color: var(--color-texto);
+    font-size: 0.95rem;
+}
+
+.grupo-formulario input,
+.grupo-formulario textarea,
+.grupo-formulario select {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-gris-medio);
+    border-radius: var(--radio-medio);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: var(--transicion-rapida);
+    background-color: var(--color-blanco);
+}
+
+.grupo-formulario input:focus,
+.grupo-formulario textarea:focus,
+.grupo-formulario select:focus {
+    outline: none;
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.grupo-formulario input::placeholder {
+    color: var(--color-gris-oscuro);
+}
+
+.grupo-formulario input.error,
+.grupo-formulario textarea.error {
+    border-color: var(--color-error);
+    background-color: rgba(229, 62, 62, 0.05);
+}
+
+/* Mensajes */
+.error-mensaje {
+    color: var(--color-error);
+    font-size: 0.85rem;
+    display: none;
+    min-height: 1rem;
+}
+
+.error-mensaje.visible {
+    display: block;
+}
+
+.mensaje-general {
+    padding: 1rem;
+    border-radius: var(--radio-medio);
+    margin-bottom: 1rem;
+    display: none;
+    font-weight: 500;
+    border-left: 4px solid transparent;
+}
+
+.mensaje-general.visible {
+    display: block;
+}
+
+.mensaje-general.exito {
+    background-color: rgba(56, 161, 105, 0.1);
+    color: var(--color-exito);
+    border-left-color: var(--color-exito);
+}
+
+.mensaje-general.error {
+    background-color: rgba(229, 62, 62, 0.1);
+    color: var(--color-error);
+    border-left-color: var(--color-error);
+}
+
+/* Botones */
+.boton-registro,
+.boton-login {
+    padding: 0.85rem 1.5rem;
+    background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
+    color: var(--color-blanco);
+    border: none;
+    border-radius: var(--radio-medio);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transicion);
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: var(--sombra-suave);
+}
+
+.boton-registro:hover,
+.boton-login:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-media);
+}
+
+.boton-registro:active,
+.boton-login:active {
+    transform: translateY(0);
+}
+
+.boton-registro:disabled,
+.boton-login:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Avatares */
+.avatar {
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+    color: var(--color-blanco);
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    box-shadow: var(--sombra-suave);
+    flex-shrink: 0;
+}
+
+.avatar-img {
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+    flex-shrink: 0;
+}
+
+.avatar-xs,
+.avatar-img.avatar-xs {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+}
+
+.avatar-sm,
+.avatar-img.avatar-sm {
+    width: 36px;
+    height: 36px;
+    font-size: 0.8rem;
+}
+
+.avatar-md,
+.avatar-img.avatar-md {
+    width: 44px;
+    height: 44px;
+    font-size: 0.9rem;
+}
+
+.avatar-lg,
+.avatar-img.avatar-lg {
+    width: 110px;
+    height: 110px;
+    font-size: 2rem;
+}
+
+.avatar-follower,
+.avatar-img.avatar-follower {
+    width: 40px;
+    height: 40px;
+    font-size: 0.85rem;
+}
+
+.avatar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Comentarios */
+.comment-user {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.comment-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-user-info strong {
+    cursor: pointer;
+    color: var(--color-primario);
+    font-size: 0.95rem;
+}
+
+.comment-user-info small {
+    color: var(--color-texto-secundario);
+    font-size: 0.8rem;
+}
+
+.comment-item {
+    background: rgba(102, 126, 234, 0.04);
+    border-radius: var(--radio-medio);
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid rgba(102, 126, 234, 0.08);
+}
+
+.comment-item p {
+    margin: 0.5rem 0;
+    color: var(--color-texto);
+    word-wrap: break-word;
+}
+
+/* Animaciones */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cargando {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--color-blanco);
+    animation: spin 0.8s linear infinite;
+    margin-right: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 14px;
+    }
+}

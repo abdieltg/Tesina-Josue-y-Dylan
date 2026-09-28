@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Sharee</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/inicio.css">
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <div class="brand">
+                <span class="brand-mark">S</span>
+                <span class="brand-name">SHAREE</span>
+            </div>
+
+            <div class="search-wrap">
+                <input type="search" id="searchInput" placeholder="Buscar usuarios, hashtags o publicaciones">
+            </div>
+
+            <div class="topbar-actions">
+                <button class="icon-button" type="button" aria-label="Notificaciones">
+                    🔔
+                </button>
+                <div class="user-mini">
+    <div id="avatarUsuarioActual" class="avatar-container">
+        <div class="avatar avatar-sm">U</div>
+    </div>
+
+    <span id="usuarioActual">Usuario</span>
+</div>
+                <a href="/Sharee/api/auth/logout.php" class="logout-button">Cerrar Sesión</a>
+            </div>
+        </header>
+
+        <div class="layout">
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <a href="inicio.html" class="nav-item active">
+                        <span>Inicio</span>
+                    </a>
+                    <a href="explorar.html" class="nav-item">
+                        <span>Explorar</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <span>Mensajes</span>
+                    </a>
+                    <a href="perfil.html" class="nav-item">
+                        <span>Perfil</span>
+                    </a>
+                    <a href="configuracion.html" class="nav-item">
+                        <span>Configuración</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <main class="main-content">
+                <section class="composer card">
+                    <div class="composer-header">
+                       <div id="avatarCompositor" class="avatar-container">
+    <div class="avatar avatar-md">U</div>
+</div>
+                        <div>
+                            <h2>¿Qué estás pensando?</h2>
+                        </div>
+                    </div>
+
+                   <form id="formPublicacion" enctype="multipart/form-data">
+    <textarea
+        id="postContent"
+        rows="4"
+        maxlength="500"
+        placeholder="Comparte algo con tu comunidad..."
+    ></textarea>
+
+    <div class="image-upload-row">
+        <label for="postImage" class="image-upload-button">
+            🖼️ Agregar imagen
+        </label>
+
+        <input
+            type="file"
+            id="postImage"
+            name="imagen"
+            accept="image/jpeg,image/png,image/webp"
+            hidden
+        >
+
+        <span id="imageName" class="image-name"></span>
+    </div>
+
+    <div id="imagePreviewContainer" class="image-preview-container" style="display: none;">
+        <img id="imagePreview" alt="Vista previa de la imagen">
+        <button type="button" id="removeImageButton" class="remove-image-button">
+            Quitar imagen
+        </button>
+    </div>
+
+    <div class="composer-footer">
+        <input
+            type="text"
+            id="postHashtags"
+            placeholder="#Sharee #Programacion #ProA"
+        >
+
+        <button type="submit" class="primary-button" id="btnPublicar">
+            Publicar
+        </button>
+    </div>
+
+    <div id="mensajePublicacion" class="mensaje-publicacion"></div>
+</form>
+                </section>
+
+                <section id="feed" class="feed" aria-live="polite"></section>
+            </main>
+
+           <aside class="rightbar">
+    <div class="card">
+        <h3>Sugerencias</h3>
+        <ul class="suggestions-list" id="suggestionsList">
+            <li style="text-align: center; color: var(--color-texto-secundario); padding: 1rem;">
+                Cargando sugerencias...
+            </li>
+        </ul>
+    </div>
+</aside>
+        </div>
+    </div>
+        <!-- Modal para editar publicación -->
+    <div id="modalEditarPost" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Publicación</h2>
+                <button type="button" class="modal-close" id="cerrarModalPost">&times;</button>
+            </div>
+            <form id="formEditarPost">
+                <textarea id="editPostContent" maxlength="500" rows="4" placeholder="Edita tu publicación..."></textarea>
+                <div class="char-count">
+                    <span id="charCountPost">0</span>/500
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="secondary-button" id="cancelarEditPost">Cancelar</button>
+                    <button type="submit" class="primary-button">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para editar comentario -->
+    <div id="modalEditarComentario" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Comentario</h2>
+                <button type="button" class="modal-close" id="cerrarModalComentario">&times;</button>
+            </div>
+            <form id="formEditarComentario">
+                <textarea id="editCommentContent" maxlength="500" rows="3" placeholder="Edita tu comentario..."></textarea>
+                <div class="char-count">
+                    <span id="charCountComment">0</span>/500
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="secondary-button" id="cancelarEditComentario">Cancelar</button>
+                    <button type="submit" class="primary-button">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div id="modalConfirmacion" class="modal">
+        <div class="modal-content modal-confirmacion">
+            <div class="modal-header">
+                <h2 id="confirmTitle">¿Confirmar acción?</h2>
+                <button type="button" class="modal-close" id="cerrarModalConfirmacion">&times;</button>
+            </div>
+            <p id="confirmMessage"></p>
+            <div class="modal-actions">
+                <button type="button" class="secondary-button" id="cancelarConfirmacion">Cancelar</button>
+                <button type="button" class="primary-button" id="confirmarAccion" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificación Toast -->
+    <div id="toastNotification" class="toast-notification"></div>
+<script src="js/avatar.js"></script>
+    <script src="js/inicio.js"></script>
+</body>
+</html>

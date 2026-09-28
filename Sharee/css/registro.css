@@ -1,0 +1,87 @@
+/* Estilos específicos para la página de registro */
+
+.registro-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
+}
+
+.registro-box {
+    background: var(--color-blanco);
+    padding: 2.5rem;
+    border-radius: var(--radio-grande);
+    box-shadow: var(--sombra-elevada);
+    width: 100%;
+    max-width: 420px;
+    animation: fadeIn 0.4s ease;
+}
+
+.logo {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+}
+
+.subtitulo {
+    text-align: center;
+    color: var(--color-gris-oscuro);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.link-login {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--color-texto-secundario);
+    font-size: 0.9rem;
+}
+
+.link-login a {
+    color: var(--color-primario);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transicion-rapida);
+}
+
+.link-login a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .registro-box {
+        padding: 2rem;
+    }
+
+    .logo {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .registro-box {
+        padding: 1.5rem;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .subtitulo {
+        font-size: 0.85rem;
+    }
+}

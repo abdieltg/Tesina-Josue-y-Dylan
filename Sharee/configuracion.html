@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - Sharee</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/configuracion.css">
+</head>
+<body>
+    <main class="configuracion-page">
+        <header class="configuracion-header">
+            <div>
+                <p class="eyebrow">Cuenta</p>
+                <h1>Configuración</h1>
+                <p>Administrá tu perfil y tus datos de acceso.</p>
+            </div>
+
+            <nav class="configuracion-nav">
+                <a href="inicio.html">Inicio</a>
+                <a href="perfil.html">Perfil</a>
+                <a href="/Sharee/api/auth/logout.php">Cerrar Sesión</a>
+            </nav>
+        </header>
+
+        <section class="configuracion-grid">
+            <article class="config-card">
+                <h2>Información del perfil</h2>
+                <p class="section-description">
+                    Actualizá la información que otros usuarios pueden ver.
+                </p>
+
+                <form id="formPerfil">
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" id="nombre" maxlength="100" required>
+                        <small class="field-error" id="error-nombre"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apellido">Apellido</label>
+                        <input type="text" id="apellido" maxlength="100" required>
+                        <small class="field-error" id="error-apellido"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Nombre de usuario</label>
+                        <input type="text" id="username" maxlength="50" required>
+                        <small class="field-error" id="error-username"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bio">Biografía</label>
+                        <textarea id="bio" maxlength="500" rows="4"></textarea>
+                        <small class="field-error" id="error-bio"></small>
+                    </div>
+
+                    <div id="mensajePerfil" class="form-message" role="status"></div>
+
+                    <button type="submit" class="primary-button" id="btnGuardarPerfil">
+                        Guardar cambios
+                    </button>
+                </form>
+            </article>
+
+            <article class="config-card">
+    <h2>Avatar</h2>
+    <p class="section-description">
+        Usá una imagen JPG, PNG o WEBP de hasta 2 MB.
+    </p>
+
+    <div class="avatar-section">
+        <div class="avatar-preview" id="avatarPreview">U</div>
+
+        <form id="formAvatar">
+            <div class="file-input-wrapper">
+                <label class="file-input-label" for="avatar">
+                    <div class="file-input-icon">📸</div>
+                    <div class="file-input-text">
+                        <strong>Arrastrá una imagen aquí</strong>
+                        <small>o hacé clic para seleccionar</small>
+                    </div>
+                </label>
+                <input type="file" id="avatar" accept="image/jpeg,image/png,image/webp" required>
+                <div class="file-selected-info"></div>
+            </div>
+
+            <div id="mensajeAvatar" class="form-message" role="status" style="margin-top: 1rem;"></div>
+
+            <button type="submit" class="secondary-button" id="btnSubirAvatar" style="width: 100%; margin-top: 1rem;">
+                Subir avatar
+            </button>
+        </form>
+    </div>
+</article>
+
+            <article class="config-card">
+                <h2>Cambiar contraseña</h2>
+                <p class="section-description">
+                    Utilizá una contraseña de al menos 6 caracteres.
+                </p>
+
+                <form id="formPassword">
+                    <div class="form-group">
+                        <label for="passwordActual">Contraseña actual</label>
+                        <input type="password" id="passwordActual" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passwordNueva">Nueva contraseña</label>
+                        <input type="password" id="passwordNueva" minlength="6" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passwordConfirmacion">Confirmar nueva contraseña</label>
+                        <input type="password" id="passwordConfirmacion" minlength="6" required>
+                    </div>
+
+                    <div id="mensajePassword" class="form-message" role="status"></div>
+
+                    <button type="submit" class="primary-button" id="btnCambiarPassword">
+                        Cambiar contraseña
+                    </button>
+                </form>
+            </article>
+        </section>
+    </main>
+    <script src="js/avatar.js"></script>
+    <script src="js/configuracion.js"></script>
+</body>
+</html>

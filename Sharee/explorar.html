@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorar - Sharee</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/explorar.css">
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <div class="brand">
+                <span class="brand-mark">S</span>
+                <span class="brand-name">SHAREE</span>
+            </div>
+
+            <div class="topbar-actions">
+                <a href="inicio.html" class="nav-link">Inicio</a>
+            </div>
+        </header>
+
+        <main class="explorar-page">
+            <div class="explorar-container">
+                <div class="explorar-content">
+                    <section class="search-panel card">
+                        <h2>Buscar usuarios</h2>
+                        <div class="search-row">
+                            <input type="text" id="searchUsersInput" placeholder="Buscar por nombre o username">
+                            <button type="button" id="btnBuscarUsuarios" class="primary-button">Buscar</button>
+                        </div>
+                        <div id="usuariosResultados" class="result-list"></div>
+                    </section>
+
+                    <section class="search-panel card">
+                        <h2>Buscar hashtags</h2>
+                        <div class="search-row">
+                            <input type="text" id="searchHashtagsInput" placeholder="Buscar #Programacion">
+                            <button type="button" id="btnBuscarHashtags" class="primary-button">Buscar</button>
+                        </div>
+                        <div id="hashtagsResultados" class="result-list"></div>
+                    </section>
+                </div>
+
+                <aside class="explorar-rightbar">
+                    <div class="card">
+                        <h3>Sugerencias</h3>
+                        <ul class="suggestions-list" id="suggestionsList">
+                            <li style="text-align: center; color: var(--color-texto-secundario); padding: 1rem;">
+                                Cargando sugerencias...
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </div>
+    <script src="js/avatar.js"></script>
+    <script src="js/explorar.js"></script>
+</body>
+</html>

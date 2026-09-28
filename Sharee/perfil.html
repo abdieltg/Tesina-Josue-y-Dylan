@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - Sharee</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/perfil.css">
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <div class="brand">
+                <span class="brand-mark">S</span>
+                <span class="brand-name">SHAREE</span>
+            </div>
+
+            <div class="topbar-actions">
+                <a href="inicio.html" class="nav-link">Inicio</a>
+                <a href="explorar.html" class="nav-link">Explorar</a>
+                <a href="/Sharee/api/auth/logout.php" class="logout-button">Cerrar Sesión</a>
+            </div>
+        </header>
+
+        <main class="perfil-page">
+            <section class="perfil-header card">
+                <div class="perfil-avatar" id="perfilAvatar">
+    <div class="avatar avatar-lg">U</div>
+</div>
+                <div class="perfil-info">
+                    <h1 id="perfilNombre">Usuario</h1>
+                    <p id="perfilUsername">@usuario</p>
+                    <p id="perfilBio">Sin biografía aún.</p>
+                    <div id="perfilAcciones" style="margin-top: 1rem;"></div>
+                </div>
+            </section>
+
+            <section class="stats-grid">
+                <div class="stat-item card" id="statPosts" style="cursor: pointer;">
+                    <strong id="totalPosts">0</strong>
+                    <span>Publicaciones</span>
+                </div>
+                <div class="stat-item card" id="statSeguidores" style="cursor: pointer;">
+                    <strong id="totalSeguidores">0</strong>
+                    <span>Seguidores</span>
+                </div>
+                <div class="stat-item card" id="statSeguidos" style="cursor: pointer;">
+                    <strong id="totalSeguidos">0</strong>
+                    <span>Seguidos</span>
+                </div>
+            </section>
+
+            <section class="perfil-detalles card" id="perfilDetalles">
+                <h2>Información</h2>
+                <ul>
+                    <li id="liEmail" style="display:none;"><strong>Email:</strong> <span id="perfilEmail">-</span></li>
+                    <li><strong>Nombre:</strong> <span id="perfilNombreReal">-</span></li>
+                    <li><strong>Apellido:</strong> <span id="perfilApellido">-</span></li>
+                    <li><strong>Miembro desde:</strong> <span id="perfilFecha">-</span></li>
+                </ul>
+            </section>
+
+            <section id="postSection" class="posts-section" style="display: none;">
+                <h2>Publicaciones</h2>
+                <div id="postsList" class="posts-list"></div>
+            </section>
+
+            <section id="followersSection" class="followers-section" style="display: none;">
+                <h2 id="followersTitle">Seguidores</h2>
+                <div id="followersList" class="followers-list"></div>
+                <button id="btnCerrar" class="close-button">Cerrar</button>
+            </section>
+        </main>
+    </div>
+    <script src="js/avatar.js"></script>
+    <script src="js/perfil.js"></script>
+</body>
+</html>
