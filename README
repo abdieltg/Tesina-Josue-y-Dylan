@@ -1,212 +1,67 @@
 # Sharee
 
-## Red social escolar para estudiantes de ProA
+## Descripción
 
-Sharee es una aplicación web desarrollada como proyecto de Tesina. Su objetivo es ofrecer una red social exclusiva para los estudiantes de la Escuela ProA, donde puedan compartir publicaciones, interactuar entre ellos y fortalecer la comunicación dentro de la comunidad educativa.
+Sharee es una red social orientada al ámbito escolar y educativo. Su objetivo es permitir que los estudiantes de la Escuela ProA puedan crear perfiles, realizar publicaciones e interactuar con otros usuarios.
 
----
+## Integrantes
 
-# Objetivo
+- Abdiel Josué Toro Guillén
+- Dylan (completar apellido y nombre completo)
 
-Crear una plataforma moderna y segura que permita a los alumnos de ProA compartir contenido e interactuar entre sí mediante publicaciones, perfiles y otras herramientas de comunicación.
+## Problema que busca resolver
 
----
+Busca ofrecer un espacio digital relacionado con la comunidad escolar, donde los estudiantes puedan comunicarse, compartir publicaciones e interactuar.
 
-# Problema que busca resolver
+## Tecnologías utilizadas
 
-Actualmente los estudiantes utilizan redes sociales generales que no están orientadas al ámbito escolar. Sharee busca ofrecer un espacio exclusivo para la comunidad ProA, facilitando la interacción entre alumnos en un entorno más organizado y seguro.
+- HTML: estructura de las páginas.
+- CSS: diseño y estilos.
+- JavaScript: interacciones de la interfaz.
+- PHP: procesamiento del backend.
+- MySQL: almacenamiento de datos.
+- XAMPP: entorno de desarrollo local.
+- phpMyAdmin: administración de la base de datos.
 
----
+## Funcionalidades principales
 
-# Funcionalidades
-
-- Inicio de sesión.
-- Registro de usuarios.
-- Publicaciones.
-- Sistema de Me Gusta.
+- Registro e inicio de sesión.
 - Perfiles de usuario.
-- Cambio de foto de perfil.
-- Buscar usuarios.
-- Seguir y dejar de seguir usuarios.
-- Visualizar perfiles.
-- Cierre de sesión.
-
-### Próximamente
-
-- Historias (Stories).
-- Mensajería privada.
-- Notificaciones.
-- Mejoras de seguridad.
-- Recuperación de contraseña.
-
----
-
-# Tecnologías utilizadas
-
-## Frontend
-
-- HTML5
-- CSS3
-- JavaScript
-
-## Backend
-
-- PHP
-
-## Base de datos
-
-- MySQL
-- phpMyAdmin
-
-## Herramientas
-
-- Visual Studio Code
-- Git
-- GitHub
-- XAMPP
-
----
-
-# Integrantes
-
-- Abdiel Josue Toro Guillen
-- Dylan
-
----
-
-# Estructura del proyecto
-
-```
-Tesina-Josue-y-Dylan/
-│
-├── api/
-│   ├── login.php
-│   ├── register.php
-│   ├── create_post.php
-│   ├── get_posts.php
-│   ├── like_post.php
-│   ├── ...
-│
-├── css/
-│
-├── js/
-│
-├── img/
-│
-├── index.html
-│
-└── README.md
-```
-
----
-
-# Instalación
-
-1. Clonar el repositorio.
-
-```bash
-git clone https://github.com/abdieltg/Tesina-Josue-y-Dylan.git
-```
-
-2. Copiar el proyecto dentro de la carpeta **htdocs** de XAMPP.
-
-3. Iniciar **Apache** y **MySQL** desde XAMPP.
-
-4. Importar la base de datos desde **phpMyAdmin**.
-
-5. Abrir el navegador e ingresar a:
-
-```
-http://localhost/Tesina-Josue-y-Dylan/
-```
-
----
-
-# Estado del proyecto
-
-Actualmente el proyecto se encuentra en desarrollo.
-
-## Funcionalidades implementadas
-
-- Login.
-- Registro.
-- Feed de publicaciones.
-- Sistema de Likes.
-- Perfiles.
-- Cambio de foto de perfil.
-- Sistema de seguidores.
-- Búsqueda de usuarios.
-
-## Funcionalidades en desarrollo
-
-- Historias.
-- Mensajería.
-- Notificaciones.
-- Optimización del rendimiento.
-- Mejoras de seguridad.
-
----
-
-# Capturas del sistema
-
-## Inicio de sesión
-
-*(Agregar captura aquí)*
-
----
-
-## Feed principal
-
-*(Agregar captura aquí)*
-
----
-
-## Perfil de usuario
-
-*(Agregar captura aquí)*
-
----
-
-## Editar perfil
-
-*(Agregar captura aquí)*
-
----
-
-# Versiones
-
-## v0.1
-
-- Estructura inicial del proyecto.
-
-## v0.5
-
-- Sistema de usuarios.
 - Publicaciones.
-- Likes.
-- Seguidores.
-- Perfiles.
+- Me gusta.
+- Seguimiento de usuarios.
+- Edición de información del perfil.
 
-## v1.0 (Próximamente)
+El funcionamiento de cada característica debe verificarse antes de considerarla terminada.
 
-- Historias.
-- Mensajería.
-- Optimización.
-- Seguridad.
-- Proyecto finalizado.
+## Estructura general
 
----
+- `Sharee/`: archivos correspondientes al sistema.
+- `api/`: scripts PHP que permiten realizar operaciones con el backend.
+- Páginas HTML, archivos CSS y scripts JavaScript: interfaz y funcionalidades del frontend.
 
-# Issues pendientes
+La estructura exacta debe ajustarse a las carpetas existentes en el repositorio.
 
-- Mejorar el sistema de perfiles.
-- Optimizar consultas a la base de datos.
-- Implementar historias.
-- Agregar mensajería.
-- Mejorar la seguridad.
+## Requisitos
 
----
+- Visual Studio Code u otro editor.
+- XAMPP con Apache y MySQL.
+- Navegador web.
+- Base de datos MySQL configurada para Sharee.
 
-# Licencia
+## Ejecución local
 
-Proyecto desarrollado con fines educativos como Tesina de la Escuela ProA.
+1. Instalar e iniciar Apache y MySQL desde XAMPP.
+2. Colocar el proyecto dentro de la carpeta `htdocs`.
+3. Abrir phpMyAdmin y preparar la base de datos `sharee`.
+4. Importar el archivo SQL de la base de datos, si está disponible.
+5. Revisar la configuración de conexión a MySQL en los archivos PHP.
+6. Abrir el proyecto desde el navegador utilizando la dirección local correspondiente.
+
+## Estado actual
+
+El proyecto se encuentra en desarrollo. Antes de publicar esta documentación, se deben comprobar las funcionalidades implementadas, la estructura del repositorio y los requisitos necesarios para ejecutarlo desde una copia limpia.
+
+## Limitaciones conocidas
+
+La ejecución depende de la configuración local del servidor y de la base de datos. Las funcionalidades que todavía presenten errores deben identificarse expresamente.
