@@ -371,3 +371,43 @@ body {
         min-width: unset;
     }
 }
+#perfilAcciones {
+    width: 100%;
+    margin-top: 15px;
+}
+
+
+.instagram-follow-btn {
+    width: 100%;
+    padding: 9px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+
+/* Botón SEGUIR */
+.instagram-follow-btn.follow {
+    background-color: #0095f6;
+    color: white;
+}
+
+
+.instagram-follow-btn.follow:hover {
+    background-color: #1877d2;
+}
+
+
+/* Botón SIGUIENDO */
+.instagram-follow-btn.following {
+    background-color: #efefef;
+    color: #262626;
+}
+
+
+.instagram-follow-btn.following:hover {
+    background-color: #dbdbdb;
+}

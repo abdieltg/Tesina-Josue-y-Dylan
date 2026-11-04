@@ -18,6 +18,7 @@
             <div class="topbar-actions">
                 <a href="inicio.html" class="nav-link">Inicio</a>
                 <a href="explorar.html" class="nav-link">Explorar</a>
+                <a href="mensajes.html" class="nav-link">Mensajes</a>
                 <a href="/Sharee/api/auth/logout.php" class="logout-button">Cerrar Sesión</a>
             </div>
         </header>
@@ -25,13 +26,15 @@
         <main class="perfil-page">
             <section class="perfil-header card">
                 <div class="perfil-avatar" id="perfilAvatar">
-    <div class="avatar avatar-lg">U</div>
-</div>
+                    <div class="avatar avatar-lg">U</div>
+                </div>
+
                 <div class="perfil-info">
                     <h1 id="perfilNombre">Usuario</h1>
                     <p id="perfilUsername">@usuario</p>
                     <p id="perfilBio">Sin biografía aún.</p>
-                    <div id="perfilAcciones" style="margin-top: 1rem;"></div>
+
+                    <div id="perfilAcciones" class="profile-actions" style="margin-top: 1rem;"></div>
                 </div>
             </section>
 
@@ -72,6 +75,7 @@
             </section>
         </main>
     </div>
+
     <script src="js/avatar.js"></script>
     <script src="js/perfil.js"></script>
 </body>

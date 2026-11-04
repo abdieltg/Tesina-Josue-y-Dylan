@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensajes - Sharee</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/mensajes.css">
+</head>
+<body>
+    <div class="mensajes-shell">
+        <aside class="chat-sidebar">
+            <div class="sidebar-top">
+                <div class="brand">
+                    <span class="brand-mark">S</span>
+                    <span class="brand-name">SHAREE</span>
+                </div>
+
+                <a href="inicio.html" class="back-link">← Inicio</a>
+            </div>
+
+            <div class="sidebar-header">
+                <h2>Mensajes</h2>
+            </div>
+
+            <div id="listaConversaciones" class="conversations-list"></div>
+        </aside>
+
+        <main class="chat-panel">
+            <header class="chat-header">
+                <div class="chat-user" id="chatUserInfo">
+                    <div class="chat-avatar placeholder-avatar">U</div>
+                    <div>
+                        <strong id="chatNombre">Seleccioná un chat</strong>
+                        <small id="chatEstado">Conectado</small>
+                    </div>
+                </div>
+
+                <div class="chat-actions">
+                    <a href="explorar.html" class="header-button">Explorar</a>
+                </div>
+            </header>
+
+            <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+
+            <form id="formMensaje" class="message-form">
+                <div class="composer-top">
+                    <textarea id="mensajeTexto" rows="1" maxlength="1000" placeholder="Escribí un mensaje..."></textarea>
+                    <button type="submit" class="submit-message">Enviar</button>
+                </div>
+
+                <div class="composer-tools">
+                    <label for="mensajeImagen" class="upload-button">Adjuntar imagen</label>
+                    <input type="file" id="mensajeImagen" accept="image/jpeg,image/png,image/webp" hidden>
+                    <span id="mensajeArchivoNombre" class="file-name"></span>
+                </div>
+
+                <div id="previewAdjunto" class="preview-adunto" style="display:none;">
+                    <img id="previewImage" alt="Vista previa del mensaje">
+                    <button type="button" id="removeImageMessage" class="remove-message-image">Quitar</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <div id="modalEditarMensaje" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar mensaje</h2>
+                <button type="button" class="modal-close" id="cerrarModalMensaje">&times;</button>
+            </div>
+
+            <form id="formEditarMensaje">
+                <textarea id="editMensajeTexto" rows="4" maxlength="1000" placeholder="Editá tu mensaje..."></textarea>
+
+                <div class="modal-actions">
+                    <button type="button" class="secondary-button" id="cancelarEditMensaje">Cancelar</button>
+                    <button type="submit" class="primary-button">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/avatar.js"></script>
+    <script src="js/mensajes.js"></script>
+</body>
+</html>

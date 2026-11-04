@@ -301,4 +301,32 @@ body {
     html {
         font-size: 14px;
     }
+}.icon-button, .ghost-button, .file-message {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-button svg,
+.file-message svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.profile-actions .primary-button,
+.profile-actions .secondary-button {
+    min-width: 150px;
+}
+
+.empty-state {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--color-texto-secundario);
 }

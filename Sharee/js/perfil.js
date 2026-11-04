@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const profileResponse = await fetch('/Sharee/api/usuarios/get_profile.php');
     const profileData = await profileResponse.json();
+
     if (profileData.success) {
         usuarioActualId = profileData.data.id;
     }
@@ -35,18 +36,11 @@ async function cargarPerfil() {
         }
 
         const usuario = data.data;
-        const esPerfil = !usuarioViendoId || usuarioViendoId == usuarioActualId;
+        const esPerfil = !usuarioViendoId || Number(usuarioViendoId) === Number(usuarioActualId);
 
-        const nombreCompleto = `${usuario.nombre || ''} ${usuario.apellido || ''}`.trim() || 'Usuario';
+        actualizarAvatarElemento(document.getElementById('perfilAvatar'), usuario, 'avatar-lg');
 
-        // IMPORTANTE: Usar actualizarAvatarElemento en lugar de .textContent
-        actualizarAvatarElemento(
-            document.getElementById('perfilAvatar'),
-            usuario,
-            'avatar-lg'
-        );
-
-        document.getElementById('perfilNombre').textContent = nombreCompleto;
+        document.getElementById('perfilNombre').textContent = nombreCompleto(usuario);
         document.getElementById('perfilUsername').textContent = `@${usuario.username || 'usuario'}`;
         document.getElementById('perfilBio').textContent = usuario.bio || 'Sin biografía aún.';
         document.getElementById('perfilNombreReal').textContent = usuario.nombre || '-';
@@ -75,34 +69,42 @@ async function cargarPerfil() {
 
 async function cargarAccionesUsuario(usuarioId) {
     const accionesDiv = document.getElementById('perfilAcciones');
+    if (!accionesDiv) return;
 
     try {
         const response = await fetch('/Sharee/api/seguidores/get_followers.php');
         const data = await response.json();
 
-        if (!data.success) {
-            return;
+        if (!data.success) return;
+
+        const yaSigue = data.data.seguidos.some(u => Number(u.id) === Number(usuarioId));
+
+        const accionSeguir = yaSigue
+            ? `<button class="secondary-button" id="btnDejarSeguir">Dejar de seguir</button>`
+            : `<button class="primary-button" id="btnSeguir">Seguir</button>`;
+
+        accionesDiv.innerHTML = `
+            <div class="profile-actions">
+                ${accionSeguir}
+                <button class="primary-button" id="btnMensajePerfil">Enviar mensaje</button>
+            </div>
+        `;
+
+        const btnSeguir = document.getElementById('btnSeguir');
+        const btnDejarSeguir = document.getElementById('btnDejarSeguir');
+        const btnMensajePerfil = document.getElementById('btnMensajePerfil');
+
+        if (btnSeguir) {
+            btnSeguir.addEventListener('click', async () => await seguir(usuarioId));
         }
 
-        const yaSigue = data.data.seguidos.some(u => u.id == usuarioId);
+        if (btnDejarSeguir) {
+            btnDejarSeguir.addEventListener('click', async () => await dejarSeguir(usuarioId));
+        }
 
-        if (yaSigue) {
-            accionesDiv.innerHTML = `
-                <button class="secondary-button" id="btnDejarSeguir" style="width: 100%;">
-                    Dejar de seguir
-                </button>
-            `;
-            document.getElementById('btnDejarSeguir').addEventListener('click', async function () {
-                await dejarSeguir(usuarioId);
-            });
-        } else {
-            accionesDiv.innerHTML = `
-                <button class="primary-button" id="btnSeguir" style="width: 100%;">
-                    Seguir
-                </button>
-            `;
-            document.getElementById('btnSeguir').addEventListener('click', async function () {
-                await seguir(usuarioId);
+        if (btnMensajePerfil) {
+            btnMensajePerfil.addEventListener('click', function () {
+                window.location.href = `/Sharee/mensajes.html?user_id=${usuarioId}`;
             });
         }
     } catch (error) {
@@ -143,58 +145,6 @@ async function mostrarPublicaciones() {
     }
 }
 
-async function mostrarSeguidores(tipo) {
-    const usuarioId = usuarioViendoId || usuarioActualId;
-
-    try {
-        const response = await fetch(`/Sharee/api/seguidores/get_follower_list.php?usuario_id=${usuarioId}&tipo=${tipo}`);
-        const data = await response.json();
-
-        const section = document.getElementById('followersSection');
-        const list = document.getElementById('followersList');
-        const title = document.getElementById('followersTitle');
-
-        if (tipo === 'seguidores') {
-            title.textContent = 'Seguidores';
-        } else {
-            title.textContent = 'Seguidos';
-        }
-
-        if (!data.success || !data.data || data.data.length === 0) {
-            list.innerHTML = '<p style="text-align: center; color: var(--color-texto-secundario);">No hay usuarios.</p>';
-            section.style.display = 'block';
-            document.getElementById('postSection').style.display = 'none';
-            return;
-        }
-
-        list.innerHTML = data.data.map(usuario => `
-            <div class="follower-item" data-user-id="${usuario.id}">
-                <div class="follower-info">
-                    <div class="follower-avatar-container">
-                        ${crearAvatarHTML(usuario, 'avatar-follower')}
-                    </div>
-                    <div class="follower-details">
-                        <strong>${usuario.nombre} ${usuario.apellido}</strong>
-                        <small>@${usuario.username}</small>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-
-        list.querySelectorAll('.follower-item').forEach(item => {
-            item.addEventListener('click', function () {
-                const userId = this.dataset.userId;
-                window.location.href = `/Sharee/perfil.html?id=${userId}`;
-            });
-        });
-
-        section.style.display = 'block';
-        document.getElementById('postSection').style.display = 'none';
-    } catch (error) {
-        console.error('Error cargando seguidores:', error);
-    }
-}
-
 function cerrarModal() {
     document.getElementById('postSection').style.display = 'none';
     document.getElementById('followersSection').style.display = 'none';
@@ -207,9 +157,7 @@ async function seguir(usuarioId) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                seguido_id: usuarioId
-            })
+            body: JSON.stringify({ seguido_id: usuarioId })
         });
 
         const data = await response.json();
@@ -232,9 +180,7 @@ async function dejarSeguir(usuarioId) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                seguido_id: usuarioId
-            })
+            body: JSON.stringify({ seguido_id: usuarioId })
         });
 
         const data = await response.json();
@@ -248,6 +194,10 @@ async function dejarSeguir(usuarioId) {
         console.error('Error:', error);
         alert('Error al dejar de seguir');
     }
+}
+
+function nombreCompleto(usuario) {
+    return `${usuario.nombre || ''} ${usuario.apellido || ''}`.trim() || 'Usuario';
 }
 
 function formatearFecha(fecha) {
