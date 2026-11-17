@@ -85,3 +85,117 @@
         font-size: 0.85rem;
     }
 }
+/* Verificación de correo: mantiene la paleta y el diseño de registro de Sharee. */
+.oculto {
+    display: none !important;
+}
+
+.panel-verificacion {
+    animation: fadeIn 0.3s ease;
+}
+
+.texto-verificacion {
+    margin-bottom: 1.25rem;
+    color: var(--color-texto-secundario);
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.texto-verificacion strong {
+    color: var(--color-texto);
+}
+
+.ayuda-codigo {
+    color: var(--color-texto-secundario);
+    font-size: 0.88rem;
+}
+
+#codigo {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.45rem;
+}
+
+.boton-reenviar {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-gris-medio);
+    border-radius: var(--radio-medio);
+    color: var(--color-primario);
+    background: var(--color-blanco);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transicion-rapida);
+}
+
+.boton-reenviar:hover:not(:disabled) {
+    border-color: var(--color-primario);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.boton-reenviar:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+#formularioCodigo {
+    gap: 0.8rem;
+}
+/* Panel de verificación de correo */
+.oculto {
+    display: none !important;
+}
+
+.panel-verificacion {
+    animation: fadeIn 0.3s ease;
+}
+
+.texto-verificacion {
+    margin-bottom: 1.25rem;
+    color: var(--color-texto-secundario);
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.texto-verificacion strong {
+    color: var(--color-texto);
+}
+
+.ayuda-codigo {
+    color: var(--color-texto-secundario);
+    font-size: 0.88rem;
+}
+
+#codigo {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.45rem;
+}
+
+.boton-reenviar,
+.boton-volver {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-gris-medio);
+    border-radius: var(--radio-medio);
+    background: var(--color-blanco);
+    color: var(--color-primario);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transicion-rapida);
+}
+
+.boton-reenviar:hover:not(:disabled),
+.boton-volver:hover {
+    border-color: var(--color-primario);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.boton-reenviar:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}

@@ -785,6 +785,11 @@ async function cargarNombreUsuario() {
         if (!data.success || !data.data) return;
 
         const usuario = data.data;
+        const enlaceAdmin = document.getElementById('adminNavItem');
+
+        if (enlaceAdmin) {
+        enlaceAdmin.hidden = usuario.role !== 'admin';
+        }
 
         nombreElemento.textContent = usuario.username || 'Usuario';
 
