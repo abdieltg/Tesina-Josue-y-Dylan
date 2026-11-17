@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración - Sharee</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <main class="admin-page">
+        <header class="admin-header">
+            <div>
+                <p class="admin-eyebrow">Sharee</p>
+                <h1>Administración</h1>
+                <p>Gestiona roles y modera publicaciones.</p>
+            </div>
+
+            <nav class="admin-nav">
+                <a href="inicio.html">Volver a Sharee</a>
+                <a href="api/auth/logout.php">Cerrar sesión</a>
+            </nav>
+        </header>
+
+        <div id="mensajeAdmin" class="admin-message" role="status"></div>
+
+        <section class="admin-card">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Usuarios</h2>
+                    <p>Solo los administradores pueden cambiar estos roles.</p>
+                </div>
+                <button type="button" class="admin-button" id="btnRecargar">
+                    Actualizar
+                </button>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaUsuarios">
+                        <tr><td colspan="4">Cargando usuarios…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="admin-card">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Publicaciones</h2>
+                    <p>Como administrador puedes eliminar publicaciones de cualquier cuenta.</p>
+                </div>
+            </div>
+
+            <div id="listaPublicaciones" class="admin-posts">
+                <p>Cargando publicaciones…</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/admin.js?v=20261117-1"></script>
+</body>
+</html>

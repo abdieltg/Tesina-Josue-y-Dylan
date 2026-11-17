@@ -1,0 +1,38 @@
+# Configuración local
+api/config_local.php
+
+# Uploads
+uploads/avatars/*
+uploads/posts/*
+!uploads/avatars/.gitkeep
+!uploads/posts/.gitkeep
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+*~
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de PHP
+session_uploads/
+*.session
+
+# Bases de datos (backups)
+database/backups/*.sql
+
+uploads/mensajes/*
+!uploads/mensajes/.gitkeep
+
+Sharee/api/config_local.php
+Sharee/uploads/mensajes/*
+!Sharee/uploads/mensajes/.gitkeep
