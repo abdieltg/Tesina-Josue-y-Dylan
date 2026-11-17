@@ -1,105 +1,137 @@
 <?php
+
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+error_reporting(E_ALL);
+
 require_once '../conexion.php';
 require_once '../sesion.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Método no permitido'
-    ]);
+function responderEliminarPublicacion(int $status, array $contenido): void
+{
+    http_response_code($status);
+    echo json_encode(
+        $contenido,
+        JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
+    );
     exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    responderEliminarPublicacion(405, [
+        'success' => false,
+        'message' => 'Método no permitido.',
+    ]);
 }
 
 if (!estaAutenticado()) {
-    http_response_code(401);
-    echo json_encode([
+    responderEliminarPublicacion(401, [
         'success' => false,
-        'message' => 'Debes iniciar sesión'
+        'message' => 'Debes iniciar sesión.',
     ]);
-    exit();
 }
 
-$usuarioId = obtenerUsuarioAutenticado();
-$input = file_get_contents('php://input');
-$data = json_decode($input, true);
+$data = json_decode(file_get_contents('php://input'), true);
 
-if ($data === null) {
-    echo json_encode([
+if (!is_array($data)) {
+    responderEliminarPublicacion(400, [
         'success' => false,
-        'message' => 'Datos inválidos'
+        'message' => 'Datos inválidos.',
     ]);
-    exit();
 }
 
-$publicacionId = (int)($data['publicacion_id'] ?? 0);
+$publicacionId = filter_var(
+    $data['publicacion_id'] ?? null,
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 1]]
+);
 
-if ($publicacionId <= 0) {
-    echo json_encode([
+if (!$publicacionId) {
+    responderEliminarPublicacion(422, [
         'success' => false,
-        'message' => 'Publicación inválida'
+        'message' => 'Publicación inválida.',
     ]);
-    exit();
 }
+
+$usuarioId = (int) obtenerUsuarioAutenticado();
 
 try {
-    // Verificar que la publicación pertenece al usuario
-    $checkStmt = $pdo->prepare("
-        SELECT usuario_id FROM publicaciones WHERE id = ?
-    ");
-    $checkStmt->execute([$publicacionId]);
-    $post = $checkStmt->fetch(PDO::FETCH_ASSOC);
+    $stmt = $pdo->prepare(
+        'SELECT role FROM usuarios WHERE id = ? LIMIT 1'
+    );
+    $stmt->execute([$usuarioId]);
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$post) {
-        echo json_encode([
+    if (!$usuario) {
+        responderEliminarPublicacion(401, [
             'success' => false,
-            'message' => 'Publicación no encontrada'
+            'message' => 'La cuenta ya no existe.',
         ]);
-        exit();
     }
 
-    if ($post['usuario_id'] != $usuarioId) {
-        http_response_code(403);
-        echo json_encode([
+    $esAdmin = $usuario['role'] === 'admin';
+
+    $stmt = $pdo->prepare(
+        'SELECT id, usuario_id
+         FROM publicaciones
+         WHERE id = ?
+         LIMIT 1'
+    );
+    $stmt->execute([$publicacionId]);
+    $publicacion = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$publicacion) {
+        responderEliminarPublicacion(404, [
             'success' => false,
-            'message' => 'No tienes permiso para eliminar esta publicación'
+            'message' => 'Publicación no encontrada.',
         ]);
-        exit();
+    }
+
+    if (!$esAdmin && (int) $publicacion['usuario_id'] !== $usuarioId) {
+        responderEliminarPublicacion(403, [
+            'success' => false,
+            'message' => 'Solo puedes eliminar tus propias publicaciones.',
+        ]);
     }
 
     $pdo->beginTransaction();
 
-    // Eliminar likes
-    $stmt = $pdo->prepare("DELETE FROM likes WHERE publicacion_id = ?");
+    $stmt = $pdo->prepare('DELETE FROM likes WHERE publicacion_id = ?');
     $stmt->execute([$publicacionId]);
 
-    // Eliminar comentarios
-    $stmt = $pdo->prepare("DELETE FROM comentarios WHERE publicacion_id = ?");
+    $stmt = $pdo->prepare('DELETE FROM comentarios WHERE publicacion_id = ?');
     $stmt->execute([$publicacionId]);
 
-    // Eliminar hashtags relacionados
-    $stmt = $pdo->prepare("DELETE FROM publicacion_hashtags WHERE publicacion_id = ?");
+    $stmt = $pdo->prepare(
+        'DELETE FROM publicacion_hashtags WHERE publicacion_id = ?'
+    );
     $stmt->execute([$publicacionId]);
 
-    // Eliminar publicación
-    $stmt = $pdo->prepare("DELETE FROM publicaciones WHERE id = ?");
+    $stmt = $pdo->prepare('DELETE FROM publicaciones WHERE id = ?');
     $stmt->execute([$publicacionId]);
 
     $pdo->commit();
 
-    echo json_encode([
+    responderEliminarPublicacion(200, [
         'success' => true,
-        'message' => 'Publicación eliminada correctamente'
+        'message' => 'Publicación eliminada correctamente.',
     ]);
-} catch (PDOException $e) {
-    $pdo->rollBack();
-    error_log('Error al eliminar publicación: ' . $e->getMessage());
+} catch (Throwable $e) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
 
-    echo json_encode([
+    error_log(
+        'Error al eliminar publicación: ' .
+        $e->getMessage() .
+        ' en ' . $e->getFile() .
+        ':' . $e->getLine()
+    );
+
+    responderEliminarPublicacion(500, [
         'success' => false,
-        'message' => 'No se pudo eliminar la publicación'
+        'message' => 'No se pudo eliminar la publicación.',
     ]);
 }
-?>

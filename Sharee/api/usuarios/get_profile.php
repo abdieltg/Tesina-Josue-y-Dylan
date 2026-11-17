@@ -27,9 +27,9 @@ if (!$usuarioId) {
 
 try {
     $stmt = $pdo->prepare("
-        SELECT id, nombre, apellido, username, email, avatar_url, bio, created_at
-        FROM usuarios
-        WHERE id = ?
+        SELECT id, nombre, apellido, username, email, avatar_url, bio, created_at, role
+FROM usuarios
+WHERE id = ?
     ");
     $stmt->execute([$usuarioId]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -72,9 +72,10 @@ try {
     ];
 
     // Solo mostrar email si es el perfil propio
-    if ($esPerfil) {
-        $data['email'] = $usuario['email'];
-    }
+   if ($esPerfil) {
+    $data['email'] = $usuario['email'];
+    $data['role'] = $usuario['role'];
+}
 
     echo json_encode([
         'success' => true,
