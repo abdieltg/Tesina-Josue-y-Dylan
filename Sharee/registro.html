@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - Sharee</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png">
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/registro.css">
+    <link rel="stylesheet" href="css/registro.css?v=2">
+    <link rel="stylesheet" href="css/notificaciones.css">
 </head>
 <body>
     <main class="registro-container">
@@ -66,6 +69,29 @@
                         <span class="error-mensaje" id="error-passwordConfirm"></span>
                     </div>
 
+                    <div class="aceptacion-terminos">
+    <label class="terminos-checkbox" for="aceptaTerminos">
+        <input
+            type="checkbox"
+            id="aceptaTerminos"
+            name="aceptaTerminos"
+            required>
+
+        <span class="terminos-checkbox-texto">
+            Acepto los
+            <button
+                type="button"
+                id="abrirTerminos"
+                class="enlace-terminos">
+                términos y condiciones
+            </button>
+            de Sharee.
+        </span>
+    </label>
+
+    <small id="error-terminos" class="error-mensaje"></small>
+</div>
+
                     <button type="submit" class="boton-registro" id="botonRegistro">
                         Registrarse
                     </button>
@@ -108,6 +134,10 @@
                     <button type="button" class="boton-reenviar" id="botonReenviar" disabled>
                         Reenviar código
                     </button>
+
+                    <button type="button" class="boton-volver" id="botonVolver">
+                        Volver al registro
+                    </button>
                 </div>
             </section>
 
@@ -119,6 +149,95 @@
         </div>
     </main>
 
+    <dialog id="dialogoTerminos" class="dialogo-terminos">
+    <div class="terminos-contenido">
+        <header class="terminos-header">
+            <div class="terminos-icono" aria-hidden="true">S</div>
+            <div>
+                <p class="terminos-etiqueta">COMUNIDAD SHAREE</p>
+                <h2>¡Te damos la bienvenida!</h2>
+                <p class="terminos-intro">
+                    Un espacio para compartir, aprender y conectar con respeto.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="terminos-cerrar"
+                id="cerrarTerminos"
+                aria-label="Cerrar términos">
+                ×
+            </button>
+        </header>
+
+        <div class="terminos-cuerpo">
+            <section class="terminos-bloque">
+                <div class="terminos-numero">01</div>
+                <div>
+                    <h3>Una comunidad educativa</h3>
+                    <p>
+                        Sharee está pensado para compartir ideas, proyectos y experiencias
+                        de la comunidad educativa. Participa con amabilidad y trata a los
+                        demás como esperas que te traten.
+                    </p>
+                </div>
+            </section>
+
+            <section class="terminos-bloque">
+                <div class="terminos-numero">02</div>
+                <div>
+                    <h3>Lo que puedes hacer</h3>
+                    <ul>
+                        <li>Publicar ideas y contenido relacionado con la comunidad.</li>
+                        <li>Comentar, aprender y conversar de forma respetuosa.</li>
+                        <li>Compartir tus proyectos y reconocer el trabajo de otras personas.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="terminos-bloque terminos-bloque-destacado">
+                <div class="terminos-numero">03</div>
+                <div>
+                    <h3>Lo que no está permitido</h3>
+                    <ul>
+                        <li>Acosar, amenazar, discriminar o hacerse pasar por otra persona.</li>
+                        <li>Publicar datos privados de otras personas sin autorización.</li>
+                        <li>Compartir contenido ilegal o que infrinja derechos de autor.</li>
+                        <li>Usar la plataforma para spam, fraude o acceso no autorizado.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <aside class="terminos-nota">
+                <span class="terminos-nota-icono" aria-hidden="true">✦</span>
+                <p>
+                    El equipo administrador puede moderar contenido que incumpla estas
+                    pautas. Si tienes un problema, comunícalo a un administrador.
+                </p>
+            </aside>
+
+            <p class="terminos-version">Términos de uso de Sharee · Versión 1.0</p>
+        </div>
+
+        <footer class="terminos-acciones">
+            <button
+                type="button"
+                class="terminos-secundario"
+                id="cerrarTerminosSecundario">
+                Ahora no
+            </button>
+
+            <button
+                type="button"
+                class="terminos-principal"
+                id="aceptarTerminos">
+                <span>Acepto y continuar</span>
+                <span aria-hidden="true">→</span>
+            </button>
+        </footer>
+    </div>
+</dialog>
+
     <button
         class="dark-mode-button"
         type="button"
@@ -127,8 +246,8 @@
         🌙
     </button>
 
-    <!-- El parámetro v obliga al navegador a cargar este archivo actualizado. -->
-    <script src="js/registro.js?v=20261117-2"></script>
-    <script src="js/darkmode.js"></script>
+    <script src="js/notificaciones.js"></script>
+    <script src="js/registro.js?v=20261117-terminos"></script>
+    <script src="js/darkmode.js?v=3" defer></script>
 </body>
 </html>

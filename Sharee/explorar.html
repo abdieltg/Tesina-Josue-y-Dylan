@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explorar - Sharee</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png">
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/explorar.css">
+    <link rel="stylesheet" href="css/explorar.css?v=3">
+    <link rel="stylesheet" href="css/notificaciones.css">
 </head>
 <body>
     <div class="app-shell">
@@ -25,37 +28,99 @@
                 <div class="explorar-content">
                     <section class="search-panel card">
                         <h2>Buscar usuarios</h2>
-                        <div class="search-row">
-                            <input type="text" id="searchUsersInput" placeholder="Buscar por nombre o username">
-                            <button type="button" id="btnBuscarUsuarios" class="primary-button">Buscar</button>
+
+                        <form id="formBuscarUsuarios" class="search-row">
+                            <input
+                                type="search"
+                                id="searchUsersInput"
+                                placeholder="Buscar por nombre o username"
+                                aria-label="Buscar usuarios"
+                                autocomplete="off">
+
+                            <button
+                                type="submit"
+                                id="btnBuscarUsuarios"
+                                class="primary-button">
+                                Buscar
+                            </button>
+                        </form>
+
+                        <div
+                            id="usuariosResultados"
+                            class="result-list"
+                            aria-live="polite">
                         </div>
-                        <div id="usuariosResultados" class="result-list"></div>
                     </section>
 
                     <section class="search-panel card">
                         <h2>Buscar hashtags</h2>
-                        <div class="search-row">
-                            <input type="text" id="searchHashtagsInput" placeholder="Buscar #Programacion">
-                            <button type="button" id="btnBuscarHashtags" class="primary-button">Buscar</button>
+
+                        <form id="formBuscarHashtags" class="search-row">
+                            <input
+                                type="search"
+                                id="searchHashtagsInput"
+                                placeholder="Buscar #Programacion"
+                                aria-label="Buscar hashtags"
+                                autocomplete="off">
+
+                            <button
+                                type="submit"
+                                id="btnBuscarHashtags"
+                                class="primary-button">
+                                Buscar
+                            </button>
+                        </form>
+
+                        <div
+                            id="hashtagsResultados"
+                            class="result-list"
+                            aria-live="polite">
                         </div>
-                        <div id="hashtagsResultados" class="result-list"></div>
+                    </section>
+
+                    <!-- Un solo panel y un solo ejemplar de cada ID. -->
+                    <section
+                        id="hashtagPostsPanel"
+                        class="hashtag-posts-panel card"
+                        aria-live="polite"
+                        hidden>
+
+                        <header class="hashtag-posts-header">
+                            <div>
+                                <span class="hashtag-posts-eyebrow">RESULTADOS</span>
+                                <h2 id="hashtagPostsTitle">Publicaciones</h2>
+                                <p id="hashtagPostsDescription">
+                                    Selecciona un hashtag para ver sus publicaciones.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                id="btnCerrarHashtagPosts"
+                                class="secondary-button">
+                                Cerrar
+                            </button>
+                        </header>
+
+                        <div id="hashtagPostsList" class="hashtag-posts-list"></div>
                     </section>
                 </div>
 
                 <aside class="explorar-rightbar">
-                    <div class="card">
+                    <section class="card suggestions-card">
                         <h3>Sugerencias</h3>
+
                         <ul class="suggestions-list" id="suggestionsList">
-                            <li style="text-align: center; color: var(--color-texto-secundario); padding: 1rem;">
-                                Cargando sugerencias...
-                            </li>
+                            <li class="suggestions-status">Cargando sugerencias...</li>
                         </ul>
-                    </div>
+                    </section>
                 </aside>
             </div>
         </main>
     </div>
+    <script src="js/darkmode.js?v=3" defer></script>
+    <script src="js/notificaciones.js"></script>
     <script src="js/avatar.js"></script>
-    <script src="js/explorar.js"></script>
+    <script src="js/explorar.js?v=3"></script>
 </body>
 </html>
