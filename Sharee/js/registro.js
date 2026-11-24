@@ -1,36 +1,42 @@
 'use strict';
 
 (() => {
-    const API = '/Sharee/api/auth/';
-    const STORAGE_KEY = 'shareeRegistroVerificacion';
+    const CLAVE_VERIFICACION = 'shareeRegistroVerificacion';
+    const VERSION_TERMINOS = '1.0';
 
     let emailPendiente = '';
     let expiraEn = 0;
     let temporizadorId = null;
-    let enviandoCodigo = false;
-    let reenviandoCodigo = false;
+    let enviando = false;
+    let reenviando = false;
 
     document.addEventListener('DOMContentLoaded', inicializar);
 
     function inicializar() {
-        const formularioRegistro = document.getElementById('formularioRegistro');
+        const formulario = document.getElementById('formularioRegistro');
         const botonVerificar = document.getElementById('botonVerificar');
         const botonReenviar = document.getElementById('botonReenviar');
-        const botonVolver = document.getElementById('botonVolver');
         const inputCodigo = document.getElementById('codigo');
 
-        if (!formularioRegistro || !botonVerificar || !botonReenviar || !inputCodigo) {
-            console.error(
-                'Registro Sharee: faltan elementos requeridos en registro.html. ' +
-                'Confirma que guardaste el HTML corregido.'
-            );
+        if (!formulario || !botonVerificar || !botonReenviar || !inputCodigo) {
+            console.error('Registro: faltan elementos requeridos en registro.html.');
             return;
         }
 
-        formularioRegistro.addEventListener('submit', manejarRegistro);
+        formulario.addEventListener('submit', manejarRegistro);
         botonVerificar.addEventListener('click', manejarVerificacion);
         botonReenviar.addEventListener('click', reenviarCodigo);
-        botonVolver?.addEventListener('click', volverAlRegistro);
+
+        document.getElementById('abrirTerminos')?.addEventListener('click', abrirTerminos);
+        document.getElementById('cerrarTerminos')?.addEventListener('click', cerrarTerminos);
+        document.getElementById('aceptarTerminos')?.addEventListener('click', aceptarTerminos);
+        document.getElementById('botonVolver')?.addEventListener('click', volverAlRegistro);
+
+        document.getElementById('aceptaTerminos')?.addEventListener('change', limpiarErrorTerminos);
+
+        document.querySelectorAll('#camposRegistro input').forEach(input => {
+            input.addEventListener('input', () => limpiarErrorInput(input.id));
+        });
 
         inputCodigo.addEventListener('input', () => {
             inputCodigo.value = inputCodigo.value.replace(/\D/g, '').slice(0, 6);
@@ -44,62 +50,84 @@
             }
         });
 
-        document.querySelectorAll('#camposRegistro input').forEach(input => {
-            input.addEventListener('input', () => limpiarErrorInput(input.id));
-        });
-
         restaurarVerificacion();
     }
 
-    async function solicitarJson(url, datos) {
-        const respuesta = await fetch(url, {
+    function abrirTerminos() {
+        document.getElementById('dialogoTerminos')?.showModal();
+    }
+
+    function cerrarTerminos() {
+        document.getElementById('dialogoTerminos')?.close();
+    }
+
+    function aceptarTerminos() {
+        const checkbox = document.getElementById('aceptaTerminos');
+
+        if (checkbox) checkbox.checked = true;
+
+        limpiarErrorTerminos();
+        cerrarTerminos();
+    }
+
+    function limpiarErrorTerminos() {
+        const error = document.getElementById('error-terminos');
+
+        if (error) {
+            error.textContent = '';
+            error.classList.remove('visible');
+        }
+    }
+
+    async function solicitarJson(url, payload) {
+        const response = await fetch(url, {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify(datos)
+            body: JSON.stringify(payload)
         });
 
-        const texto = await respuesta.text();
+        const texto = await response.text();
 
-        let cuerpo;
+        let data;
         try {
-            cuerpo = JSON.parse(texto);
+            data = JSON.parse(texto);
         } catch (error) {
-            console.error('El endpoint no devolvió JSON válido:', {
+            console.error('Respuesta no JSON del servidor:', {
                 url,
-                status: respuesta.status,
-                respuesta: texto.slice(0, 3000)
+                status: response.status,
+                body: texto.slice(0, 2500)
             });
-
-            throw new Error(
-                `El servidor respondió con HTTP ${respuesta.status}, pero no devolvió JSON válido.`
-            );
+            throw new Error(`El servidor respondió con HTTP ${response.status} y un formato inválido.`);
         }
 
-        return { respuesta, cuerpo };
+        return { response, data };
     }
 
     async function manejarRegistro(event) {
         event.preventDefault();
 
-        if (enviandoCodigo) return;
+        if (enviando) return;
 
         limpiarErroresFormulario();
         mostrarMensaje('mensajeGeneral', '');
 
-        const boton = document.getElementById('botonRegistro');
+        const checkbox = document.getElementById('aceptaTerminos');
+        const errorTerminos = document.getElementById('error-terminos');
 
-        if (!boton) {
-            mostrarMensaje(
-                'mensajeGeneral',
-                'No se encuentra el botón de registro en la página.',
-                'error'
-            );
+        if (!checkbox?.checked) {
+            if (errorTerminos) {
+                errorTerminos.textContent = 'Debes aceptar los términos y condiciones para crear una cuenta.';
+                errorTerminos.classList.add('visible');
+            }
+            document.getElementById('abrirTerminos')?.focus();
             return;
         }
 
+        const boton = document.getElementById('botonRegistro');
         const textoOriginal = boton.textContent;
 
         const datosRegistro = {
@@ -107,225 +135,179 @@
             apellido: valor('apellido'),
             username: valor('username'),
             email: valor('email').toLowerCase(),
-            password: document.getElementById('password')?.value ?? '',
-            passwordConfirm: document.getElementById('passwordConfirm')?.value ?? ''
+            password: document.getElementById('password').value,
+            passwordConfirm: document.getElementById('passwordConfirm').value,
+            acepta_terminos: true,
+            terminos_version: VERSION_TERMINOS
         };
 
-        enviandoCodigo = true;
+        enviando = true;
         boton.disabled = true;
-        boton.textContent = 'Enviando código...';
+        boton.textContent = 'Enviando código…';
 
         try {
-            const { cuerpo } = await solicitarJson(
-                `${API}registro.php`,
+            const { data } = await solicitarJson(
+                '/Sharee/api/auth/registro.php',
                 datosRegistro
             );
 
-            if (!cuerpo.success) {
-                mostrarErrores(cuerpo.errors);
+            if (!data.success) {
+                mostrarErrores(data.errors);
                 mostrarMensaje(
                     'mensajeGeneral',
-                    cuerpo.message || 'No se pudo iniciar el registro.',
+                    data.message || 'No se pudo iniciar el registro.',
                     'error'
                 );
                 return;
             }
 
-            const email = String(cuerpo.email || datosRegistro.email).trim();
-
-            if (!email) {
-                throw new Error(
-                    'El servidor aceptó el registro, pero no devolvió el correo para verificar.'
-                );
-            }
-
-            emailPendiente = email;
-            mostrarPanelVerificacion(cuerpo.expires_in || 300);
-
+            emailPendiente = data.email || datosRegistro.email;
+            mostrarPanelVerificacion(data.expires_in || 300);
             mostrarMensaje(
                 'mensajeCodigo',
-                cuerpo.message || 'Te enviamos un código. Revisa tu correo.',
+                data.message || 'Te enviamos un código. Revisa tu correo.',
                 'exito'
             );
-
             document.getElementById('codigo')?.focus();
         } catch (error) {
             console.error('Error iniciando registro:', error);
             mostrarMensaje(
                 'mensajeGeneral',
-                error.message || 'No se pudo completar el registro. Intenta nuevamente.',
+                error.message || 'No se pudo iniciar el registro.',
                 'error'
             );
         } finally {
-            enviandoCodigo = false;
+            enviando = false;
             boton.disabled = false;
             boton.textContent = textoOriginal;
         }
     }
 
     async function manejarVerificacion() {
-        if (enviandoCodigo) return;
+        if (enviando) return;
 
         const boton = document.getElementById('botonVerificar');
-        const inputCodigo = document.getElementById('codigo');
-
-        if (!boton || !inputCodigo) {
-            console.error('Registro Sharee: falta el botón o el campo de código.');
-            return;
-        }
+        const input = document.getElementById('codigo');
+        const codigo = input.value.trim();
 
         if (!emailPendiente) {
             mostrarMensaje(
                 'mensajeCodigo',
-                'No encontramos el registro pendiente. Vuelve a completar el registro.',
+                'No encontramos el registro pendiente. Volvé a completar el registro.',
                 'error'
             );
             return;
         }
 
-        const codigo = inputCodigo.value.trim();
-
         if (!/^\d{6}$/.test(codigo)) {
-            mostrarMensaje(
-                'mensajeCodigo',
-                'Escribe los seis números que recibiste por correo.',
-                'error'
-            );
-            inputCodigo.focus();
+            mostrarMensaje('mensajeCodigo', 'Ingresa los seis dígitos del código.', 'error');
+            input.focus();
             return;
         }
 
         const textoOriginal = boton.textContent;
-        enviandoCodigo = true;
+        enviando = true;
         boton.disabled = true;
-        boton.textContent = 'Verificando...';
+        boton.textContent = 'Verificando…';
 
         try {
-            const { cuerpo } = await solicitarJson(
-                `${API}verificar_codigo.php`,
+            const { data } = await solicitarJson(
+                '/Sharee/api/auth/verificar_codigo.php',
                 { email: emailPendiente, codigo }
             );
 
-            if (!cuerpo.success) {
-                if (cuerpo.expired) {
+            if (!data.success) {
+                if (data.expired) {
                     expiraEn = Date.now();
                     actualizarContador();
                 }
 
                 mostrarMensaje(
                     'mensajeCodigo',
-                    cuerpo.message || 'No se pudo verificar el código.',
+                    data.message || 'No se pudo verificar el código.',
                     'error'
                 );
                 return;
             }
 
             detenerTemporizador();
-            sessionStorage.removeItem(STORAGE_KEY);
-
+            sessionStorage.removeItem(CLAVE_VERIFICACION);
             mostrarMensaje(
                 'mensajeCodigo',
-                cuerpo.message || 'Correo verificado. Tu cuenta ya fue creada.',
-                'exito'
+                data.message || 'Cuenta creada correctamente.',
+                'success'
             );
-
-            boton.textContent = 'Verificado';
 
             window.setTimeout(() => {
                 window.location.href = '/Sharee/login.html';
-            }, 1500);
+            }, 1800);
         } catch (error) {
-            console.error('Error verificando el código:', error);
-            mostrarMensaje(
-                'mensajeCodigo',
-                error.message || 'No se pudo verificar el código. Intenta nuevamente.',
-                'error'
-            );
+            console.error('Error verificando código:', error);
+            mostrarMensaje('mensajeCodigo', error.message, 'error');
         } finally {
-            enviandoCodigo = false;
-
-            if (document.body.contains(boton) && boton.textContent !== 'Verificado') {
-                boton.disabled = false;
-                boton.textContent = textoOriginal;
-            }
+            enviando = false;
+            boton.disabled = false;
+            boton.textContent = textoOriginal;
         }
     }
 
     async function reenviarCodigo() {
         const boton = document.getElementById('botonReenviar');
 
-        if (!boton || reenviandoCodigo || !emailPendiente) return;
-        if (Date.now() < expiraEn) return;
+        if (!emailPendiente || reenviando || Date.now() < expiraEn) return;
 
         const textoOriginal = boton.textContent;
-        reenviandoCodigo = true;
+        reenviando = true;
         boton.disabled = true;
-        boton.textContent = 'Reenviando...';
+        boton.textContent = 'Reenviando…';
 
         try {
-            const { cuerpo } = await solicitarJson(
-                `${API}reenviar_codigo.php`,
+            const { data } = await solicitarJson(
+                '/Sharee/api/auth/reenviar_codigo.php',
                 { email: emailPendiente }
             );
 
-            if (!cuerpo.success) {
-                if (Number(cuerpo.retry_after) > 0) {
-                    iniciarContador(Number(cuerpo.retry_after));
+            if (!data.success) {
+                if (Number(data.retry_after) > 0) {
+                    iniciarContador(Number(data.retry_after));
                 }
 
                 mostrarMensaje(
                     'mensajeCodigo',
-                    cuerpo.message || 'No se pudo reenviar el código.',
+                    data.message || 'No se pudo reenviar el código.',
                     'error'
                 );
                 return;
             }
 
             document.getElementById('codigo').value = '';
-            iniciarContador(cuerpo.expires_in || 300);
-
+            iniciarContador(data.expires_in || 300);
             mostrarMensaje(
                 'mensajeCodigo',
-                cuerpo.message || 'Te enviamos un nuevo código.',
-                'exito'
+                data.message || 'Te enviamos un nuevo código.',
+                'success'
             );
         } catch (error) {
-            console.error('Error reenviando el código:', error);
-            mostrarMensaje(
-                'mensajeCodigo',
-                error.message || 'No se pudo reenviar el código.',
-                'error'
-            );
+            console.error('Error reenviando código:', error);
+            mostrarMensaje('mensajeCodigo', error.message, 'error');
         } finally {
-            reenviandoCodigo = false;
+            reenviando = false;
             boton.textContent = textoOriginal;
             actualizarContador();
         }
     }
 
     function mostrarPanelVerificacion(segundos) {
-        const campos = document.getElementById('camposRegistro');
-        const panel = document.getElementById('panelVerificacion');
-        const correo = document.getElementById('correoVerificacion');
-
-        if (!campos || !panel || !correo) {
-            throw new Error(
-                'Falta un elemento del panel de verificación. ' +
-                'Reemplaza registro.html y recarga la página con Ctrl + F5.'
-            );
-        }
-
-        correo.textContent = emailPendiente;
-        campos.classList.add('oculto');
-        panel.classList.remove('oculto');
-
+        document.getElementById('correoVerificacion').textContent = emailPendiente;
+        document.getElementById('camposRegistro').classList.add('oculto');
+        document.getElementById('panelVerificacion').classList.remove('oculto');
         iniciarContador(segundos);
     }
 
     function iniciarContador(segundos) {
         const duracion = Math.max(0, Number(segundos) || 0);
-
         expiraEn = Date.now() + duracion * 1000;
+
         guardarEstado();
         detenerTemporizador();
         actualizarContador();
@@ -336,64 +318,42 @@
     }
 
     function actualizarContador() {
-        const elemento = document.getElementById('temporizador');
-        const botonReenviar = document.getElementById('botonReenviar');
+        const restante = Math.max(0, Math.ceil((expiraEn - Date.now()) / 1000));
+        const mm = String(Math.floor(restante / 60)).padStart(2, '0');
+        const ss = String(restante % 60).padStart(2, '0');
 
-        if (!expiraEn) {
-            if (elemento) elemento.textContent = '05:00';
-            if (botonReenviar) botonReenviar.disabled = true;
-            return;
-        }
+        const texto = document.getElementById('temporizador');
+        if (texto) texto.textContent = `${mm}:${ss}`;
 
-        const restantes = Math.max(0, Math.ceil((expiraEn - Date.now()) / 1000));
-        const minutos = String(Math.floor(restantes / 60)).padStart(2, '0');
-        const segundos = String(restantes % 60).padStart(2, '0');
+        const reenviar = document.getElementById('botonReenviar');
+        if (reenviar && !reenviando) reenviar.disabled = restante > 0;
 
-        if (elemento) {
-            elemento.textContent = `${minutos}:${segundos}`;
-        }
-
-        if (botonReenviar && !reenviandoCodigo) {
-            botonReenviar.disabled = restantes > 0;
-        }
-
-        if (restantes === 0) {
-            detenerTemporizador();
-        }
+        if (restante === 0) detenerTemporizador();
     }
 
     function restaurarVerificacion() {
-        let estado;
-
         try {
-            estado = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || 'null');
-        } catch {
-            sessionStorage.removeItem(STORAGE_KEY);
-            return;
-        }
+            const guardado = JSON.parse(
+                sessionStorage.getItem(CLAVE_VERIFICACION) || 'null'
+            );
 
-        if (!estado || !estado.email || !Number(estado.expiraEn)) return;
+            if (!guardado?.email || !guardado?.expiraEn) return;
 
-        emailPendiente = String(estado.email);
-        expiraEn = Number(estado.expiraEn);
+            emailPendiente = guardado.email;
+            expiraEn = Number(guardado.expiraEn);
 
-        const campos = document.getElementById('camposRegistro');
-        const panel = document.getElementById('panelVerificacion');
-        const correo = document.getElementById('correoVerificacion');
+            document.getElementById('correoVerificacion').textContent = emailPendiente;
+            document.getElementById('camposRegistro').classList.add('oculto');
+            document.getElementById('panelVerificacion').classList.remove('oculto');
 
-        if (!campos || !panel || !correo) {
-            console.error('No se puede restaurar el panel: revisa registro.html.');
-            return;
-        }
+            actualizarContador();
 
-        correo.textContent = emailPendiente;
-        campos.classList.add('oculto');
-        panel.classList.remove('oculto');
-
-        actualizarContador();
-
-        if (Date.now() < expiraEn) {
-            temporizadorId = window.setInterval(actualizarContador, 1000);
+            if (Date.now() < expiraEn) {
+                temporizadorId = window.setInterval(actualizarContador, 1000);
+            }
+        } catch (error) {
+            console.error('No se pudo restaurar la verificación:', error);
+            sessionStorage.removeItem(CLAVE_VERIFICACION);
         }
     }
 
@@ -401,23 +361,9 @@
         if (!emailPendiente || !expiraEn) return;
 
         sessionStorage.setItem(
-            STORAGE_KEY,
+            CLAVE_VERIFICACION,
             JSON.stringify({ email: emailPendiente, expiraEn })
         );
-    }
-
-    function volverAlRegistro() {
-        detenerTemporizador();
-        sessionStorage.removeItem(STORAGE_KEY);
-
-        emailPendiente = '';
-        expiraEn = 0;
-
-        document.getElementById('panelVerificacion')?.classList.add('oculto');
-        document.getElementById('camposRegistro')?.classList.remove('oculto');
-
-        mostrarMensaje('mensajeCodigo', '');
-        mostrarMensaje('mensajeGeneral', '');
     }
 
     function detenerTemporizador() {
@@ -427,21 +373,31 @@
         }
     }
 
+    function volverAlRegistro() {
+        detenerTemporizador();
+        sessionStorage.removeItem(CLAVE_VERIFICACION);
+        emailPendiente = '';
+        expiraEn = 0;
+
+        document.getElementById('panelVerificacion').classList.add('oculto');
+        document.getElementById('camposRegistro').classList.remove('oculto');
+        mostrarMensaje('mensajeCodigo', '');
+        mostrarMensaje('mensajeGeneral', '');
+    }
+
     function valor(id) {
-        return document.getElementById(id)?.value.trim() ?? '';
+        return document.getElementById(id)?.value.trim() || '';
     }
 
     function mostrarErrores(errores) {
         if (!errores || typeof errores !== 'object') return;
 
         Object.entries(errores).forEach(([campo, mensaje]) => {
-            const input = document.getElementById(campo);
+            document.getElementById(campo)?.classList.add('error');
+
             const error = document.getElementById(`error-${campo}`);
-
-            input?.classList.add('error');
-
             if (error) {
-                error.textContent = String(mensaje);
+                error.textContent = mensaje;
                 error.classList.add('visible');
             }
         });
@@ -465,10 +421,7 @@
 
     function mostrarMensaje(id, texto, tipo = '') {
         const elemento = document.getElementById(id);
-        if (!elemento) {
-            console.error(`No existe el elemento #${id} en registro.html.`);
-            return;
-        }
+        if (!elemento) return;
 
         elemento.textContent = texto;
         elemento.className = texto

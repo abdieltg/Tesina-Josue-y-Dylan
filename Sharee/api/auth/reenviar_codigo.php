@@ -1,7 +1,7 @@
 <?php
 
 require_once dirname(__DIR__) . '/conexion.php';
-require_once __DIR__ . '/email_verificacion.php';
+require_once __DIR__ . '/email_verification.php';
 
 header('Content-Type: application/json; charset=utf-8');
 

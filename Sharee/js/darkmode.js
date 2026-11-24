@@ -1,64 +1,132 @@
-(function () {
-    const STORAGE_KEY = 'sharee-theme';
+'use strict';
 
-    function makeIcon(isDark) {
+(() => {
+    const STORAGE_KEY = 'sharee-theme';
+    const DARK_THEME = 'dark';
+    const LIGHT_THEME = 'light';
+
+    function leerTemaGuardado() {
+        try {
+            const tema = localStorage.getItem(STORAGE_KEY);
+            return tema === DARK_THEME || tema === LIGHT_THEME ? tema : null;
+        } catch (error) {
+            console.warn('No se pudo leer el tema guardado:', error);
+            return null;
+        }
+    }
+
+    function temaInicial() {
+        const guardado = leerTemaGuardado();
+
+        if (guardado) {
+            return guardado;
+        }
+
+        return window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? DARK_THEME
+            : LIGHT_THEME;
+    }
+
+    function temaActual() {
+        return document.documentElement.dataset.theme === DARK_THEME
+            ? DARK_THEME
+            : LIGHT_THEME;
+    }
+
+    function crearIcono(tema) {
+        if (tema === DARK_THEME) {
+            // Sol: pulsar permite cambiar al tema claro.
+            return `
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+                </svg>
+            `;
+        }
+
+        // Luna: pulsar permite cambiar al tema oscuro.
         return `
-            <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
-                <path d="${isDark
-                    ? 'M12 3.5a.75.75 0 0 1 .75.75v1.2a.75.75 0 0 1-1.5 0V4.25A.75.75 0 0 1 12 3.5Zm0 14.75a.75.75 0 0 1 .75.75v1.2a.75.75 0 0 1-1.5 0v-1.2a.75.75 0 0 1 .75-.75Zm7.5-6.75a.75.75 0 0 1 .75.75.75.75 0 0 1-.75.75h-1.2a.75.75 0 0 1 0-1.5h1.2ZM6.7 6.7a.75.75 0 0 1 1.06 0l.85.85a.75.75 0 1 1-1.06 1.06L6.7 7.76A.75.75 0 0 1 6.7 6.7Zm10.6 10.6a.75.75 0 0 1 1.06 0l.85.85a.75.75 0 1 1-1.06 1.06l-.85-.85a.75.75 0 0 1 0-1.06ZM4.25 12a.75.75 0 0 1 .75-.75h1.2a.75.75 0 0 1 0 1.5H5A.75.75 0 0 1 4.25 12Zm13.5 0a.75.75 0 0 1 .75-.75h1.2a.75.75 0 0 1 0 1.5h-1.2a.75.75 0 0 1-.75-.75Zm-9.8-4.3a.75.75 0 0 1 1.06 0l.85.85a.75.75 0 1 1-1.06 1.06l-.85-.85a.75.75 0 0 1 0-1.06Zm7.5 7.5a.75.75 0 0 1 1.06 0l.85.85a.75.75 0 1 1-1.06 1.06l-.85-.85a.75.75 0 0 1 0-1.06ZM12 7.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 0 1 0-9Z'
-                    : 'M20.5 14.5a7.5 7.5 0 0 1-9.8-9.8a8.5 8.5 0 1 0 9.8 9.8Z'}"
-                fill="currentColor"/>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8 8.7 8.7 0 1 0 20.2 15.4Z"></path>
             </svg>
         `;
     }
 
-    function aplicarTema(tema) {
-        if (tema === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-        } else {
-            document.documentElement.removeAttribute('data-theme');
-        }
-        actualizarTodosBotones();
-    }
-
-    function obtenerTemaInicial() {
-        const guardado = localStorage.getItem(STORAGE_KEY);
-        if (guardado) return guardado;
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-
     function actualizarBoton(boton) {
-        const oscuro = document.documentElement.getAttribute('data-theme') === 'dark';
-        boton.innerHTML = makeIcon(oscuro);
-        boton.setAttribute('aria-label', oscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+        const oscuro = temaActual() === DARK_THEME;
+        const accion = oscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
+
+        boton.innerHTML = crearIcono(temaActual());
+        boton.setAttribute('aria-label', accion);
+        boton.setAttribute('title', accion);
+        boton.setAttribute('aria-pressed', oscuro ? 'true' : 'false');
     }
 
-    function actualizarTodosBotones() {
+    function actualizarBotones() {
         document.querySelectorAll('[data-dark-mode-toggle]').forEach(actualizarBoton);
     }
 
-    function alternarTema() {
-        const oscuro = document.documentElement.getAttribute('data-theme') === 'dark';
-        const nuevoTema = oscuro ? 'light' : 'dark';
-        aplicarTema(nuevoTema);
-        localStorage.setItem(STORAGE_KEY, nuevoTema);
-    }
+    function aplicarTema(tema, guardar = false) {
+        const nuevoTema = tema === DARK_THEME ? DARK_THEME : LIGHT_THEME;
 
-    function configurarBotones() {
-        document.querySelectorAll('[data-dark-mode-toggle]').forEach((boton) => {
-            if (!boton.dataset.configurado) {
-                boton.addEventListener('click', alternarTema);
-                boton.dataset.configurado = 'true';
-                actualizarBoton(boton);
+        document.documentElement.dataset.theme = nuevoTema;
+        document.documentElement.style.colorScheme =
+            nuevoTema === DARK_THEME ? 'dark' : 'light';
+
+        if (guardar) {
+            try {
+                localStorage.setItem(STORAGE_KEY, nuevoTema);
+            } catch (error) {
+                console.warn('No se pudo guardar el tema:', error);
             }
-        });
+        }
+
+        actualizarBotones();
     }
 
-    aplicarTema(obtenerTemaInicial());
+    function crearBotonGlobal() {
+        let boton = document.querySelector('[data-dark-mode-toggle]');
+
+        if (!boton) {
+            boton = document.createElement('button');
+            boton.type = 'button';
+            boton.className = 'dark-mode-button';
+            boton.dataset.darkModeToggle = '';
+            document.body.appendChild(boton);
+        }
+
+        if (boton.dataset.darkModeReady === 'true') {
+            actualizarBoton(boton);
+            return;
+        }
+
+        boton.dataset.darkModeReady = 'true';
+        boton.addEventListener('click', () => {
+            aplicarTema(
+                temaActual() === DARK_THEME ? LIGHT_THEME : DARK_THEME,
+                true
+            );
+        });
+
+        actualizarBoton(boton);
+    }
+
+    // Se aplica el tema antes de esperar a que el documento termine de cargar.
+    aplicarTema(temaInicial());
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', configurarBotones);
+        document.addEventListener('DOMContentLoaded', crearBotonGlobal, { once: true });
     } else {
-        configurarBotones();
+        crearBotonGlobal();
     }
+
+    // Sincroniza el tema si cambia en otra pestaña del mismo navegador.
+    window.addEventListener('storage', event => {
+        if (event.key === STORAGE_KEY) {
+            aplicarTema(
+                event.newValue === DARK_THEME ? DARK_THEME : LIGHT_THEME
+            );
+        }
+    });
 })();

@@ -1,0 +1,65 @@
+.avisos-sharee {
+    position: fixed;
+    z-index: 3000;
+    top: 1rem;
+    right: 1rem;
+    display: grid;
+    gap: 0.65rem;
+    width: min(390px, calc(100vw - 2rem));
+    pointer-events: none;
+}
+
+.aviso-sharee {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radio-medio);
+    background: var(--color-blanco);
+    box-shadow: var(--sombra-media);
+    animation: fadeIn 0.2s ease;
+    pointer-events: auto;
+}
+
+.aviso-sharee-texto {
+    overflow-wrap: anywhere;
+}
+
+.aviso-success {
+    color: #276749;
+    border-color: rgba(56, 161, 105, 0.35);
+    background: #f0fff4;
+}
+
+.aviso-error {
+    color: #9b2c2c;
+    border-color: rgba(229, 62, 62, 0.35);
+    background: #fff5f5;
+}
+
+.aviso-info {
+    color: var(--color-texto);
+    border-color: rgba(102, 126, 234, 0.25);
+    background: var(--color-blanco);
+}
+
+.aviso-sharee-cerrar {
+    flex: 0 0 auto;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+@media (max-width: 480px) {
+    .avisos-sharee {
+        top: 0.5rem;
+        right: 0.5rem;
+        width: calc(100vw - 1rem);
+    }
+}

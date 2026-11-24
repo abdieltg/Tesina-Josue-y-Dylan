@@ -47,23 +47,21 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^\d{6}$/', $codi
 try {
     $pdo->beginTransaction();
 
-    /*
-     * Todas las verificaciones pasan por esta fila. Así, dos solicitudes
-     * concurrentes no pueden decidir a la vez que son el primer usuario.
-     */
+    // Serializa la asignación del rol del primer usuario.
     $stmt = $pdo->query(
         'SELECT id FROM admin_bootstrap_lock WHERE id = 1 FOR UPDATE'
     );
 
     if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
         throw new RuntimeException(
-            'No existe la fila de bloqueo. Ejecuta el SQL de roles_administrador.sql.'
+            'Falta la fila admin_bootstrap_lock. Comprueba la migración de roles.'
         );
     }
 
     $stmt = $pdo->prepare(
         'SELECT id, nombre, apellido, username, email,
-                password_hash, codigo_hash, expira_en, intentos
+                password_hash, codigo_hash, expira_en, intentos,
+                terminos_aceptados_en, terminos_version
          FROM registros_pendientes
          WHERE email = ?
          LIMIT 1
@@ -77,6 +75,14 @@ try {
         responderVerificacion(404, [
             'success' => false,
             'message' => 'No hay un registro pendiente para ese correo. Vuelve a registrarte.',
+        ]);
+    }
+
+    if (empty($pendiente['terminos_aceptados_en']) || empty($pendiente['terminos_version'])) {
+        $pdo->commit();
+        responderVerificacion(422, [
+            'success' => false,
+            'message' => 'El registro no contiene la aceptación de términos. Vuelve a registrarte y acepta los términos.',
         ]);
     }
 
@@ -107,7 +113,9 @@ try {
         $intentos = (int) $pendiente['intentos'] + 1;
 
         $stmt = $pdo->prepare(
-            'UPDATE registros_pendientes SET intentos = ? WHERE id = ?'
+            'UPDATE registros_pendientes
+             SET intentos = ?
+             WHERE id = ?'
         );
         $stmt->execute([$intentos, $pendiente['id']]);
 
@@ -143,17 +151,17 @@ try {
         ]);
     }
 
-    // El rol nunca se acepta del navegador.
-    $totalUsuarios = (int) $pdo
+    $cantidadUsuarios = (int) $pdo
         ->query('SELECT COUNT(*) FROM usuarios')
         ->fetchColumn();
 
-    $rol = $totalUsuarios === 0 ? 'admin' : 'user';
+    $rol = $cantidadUsuarios === 0 ? 'admin' : 'user';
 
     $stmt = $pdo->prepare(
         'INSERT INTO usuarios
-            (nombre, apellido, username, email, password, role)
-         VALUES (?, ?, ?, ?, ?, ?)'
+            (nombre, apellido, username, email, password, role,
+             terminos_aceptados_en, terminos_version)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
     );
     $stmt->execute([
         $pendiente['nombre'],
@@ -162,6 +170,8 @@ try {
         $pendiente['email'],
         $pendiente['password_hash'],
         $rol,
+        $pendiente['terminos_aceptados_en'],
+        $pendiente['terminos_version'],
     ]);
 
     $stmt = $pdo->prepare(
@@ -175,8 +185,8 @@ try {
         'success' => true,
         'role' => $rol,
         'message' => $rol === 'admin'
-            ? 'Correo verificado. Tu cuenta se creó como administradora.'
-            : 'Correo verificado y cuenta creada. Ya puedes iniciar sesión.',
+            ? '¡Bienvenido a Sharee! Tu cuenta se creó como administradora.'
+            : '¡Bienvenido a Sharee! Tu cuenta fue creada correctamente.',
     ]);
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {

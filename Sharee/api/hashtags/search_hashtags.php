@@ -1,65 +1,91 @@
 <?php
-require_once '../conexion.php';
-require_once '../sesion.php';
+
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+error_reporting(E_ALL);
+
+require_once dirname(__DIR__) . '/conexion.php';
+require_once dirname(__DIR__) . '/sesion.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-    http_response_code(405);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Método no permitido'
-    ]);
+function responderBusquedaHashtag(int $status, array $contenido): void
+{
+    http_response_code($status);
+    echo json_encode(
+        $contenido,
+        JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
+    );
     exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    responderBusquedaHashtag(405, [
+        'success' => false,
+        'message' => 'Método no permitido.',
+    ]);
 }
 
 if (!estaAutenticado()) {
-    http_response_code(401);
-    echo json_encode([
+    responderBusquedaHashtag(401, [
         'success' => false,
-        'message' => 'Debes iniciar sesión'
+        'message' => 'Debes iniciar sesión.',
     ]);
-    exit();
 }
 
-$termino = trim($_GET['q'] ?? '');
+$termino = trim((string) ($_GET['q'] ?? ''));
+$termino = ltrim($termino, '#');
 
 if ($termino === '') {
-    echo json_encode([
+    responderBusquedaHashtag(422, [
         'success' => false,
-        'message' => 'Debes ingresar un hashtag'
+        'message' => 'Ingresa un hashtag para buscar.',
     ]);
-    exit();
 }
 
-$terminoNormalizado = ltrim($termino, '#');
-$terminoLike = '%' . $terminoNormalizado . '%';
+if (strlen($termino) > 100) {
+    $termino = substr($termino, 0, 100);
+}
 
 try {
-    $stmt = $pdo->prepare("
-        SELECT h.id, h.nombre, COUNT(ph.publicacion_id) AS cantidad_publicaciones
-        FROM hashtags h
-        LEFT JOIN publicacion_hashtags ph ON ph.hashtag_id = h.id
-        WHERE h.nombre LIKE ?
-        GROUP BY h.id, h.nombre
-        ORDER BY cantidad_publicaciones DESC, h.nombre ASC
-        LIMIT 10
-    ");
+    $stmt = $pdo->prepare(
+        'SELECT
+            h.id,
+            h.nombre,
+            COUNT(DISTINCT ph.publicacion_id) AS cantidad_publicaciones
+         FROM hashtags h
+         LEFT JOIN publicacion_hashtags ph
+             ON ph.hashtag_id = h.id
+         WHERE h.nombre LIKE ?
+         GROUP BY h.id, h.nombre
+         ORDER BY cantidad_publicaciones DESC, h.nombre ASC
+         LIMIT 20'
+    );
 
-    $stmt->execute([$terminoLike]);
+    $stmt->execute(['%' . $termino . '%']);
     $hashtags = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    echo json_encode([
-        'success' => true,
-        'message' => 'Búsqueda de hashtags realizada',
-        'data' => $hashtags
-    ]);
-} catch (PDOException $e) {
-    error_log('Error al buscar hashtags: ' . $e->getMessage());
+    foreach ($hashtags as &$hashtag) {
+        $hashtag['id'] = (int) $hashtag['id'];
+        $hashtag['cantidad_publicaciones'] =
+            (int) $hashtag['cantidad_publicaciones'];
+    }
+    unset($hashtag);
 
-    echo json_encode([
+    responderBusquedaHashtag(200, [
+        'success' => true,
+        'data' => $hashtags,
+    ]);
+} catch (Throwable $e) {
+    error_log(
+        'Error buscando hashtags: ' .
+        $e->getMessage() .
+        ' en ' . $e->getFile() .
+        ':' . $e->getLine()
+    );
+
+    responderBusquedaHashtag(500, [
         'success' => false,
-        'message' => 'No se pudo buscar hashtags'
+        'message' => 'No se pudieron buscar hashtags.',
     ]);
 }
-?>
